@@ -7,8 +7,8 @@
 <meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="server-manager-discord-bot" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Streamlining Community Management with ServerManager ! ServerManager Logo (LOGO.svg) Building a Dis…" />
-<meta name="twitter:description" property="og:description" content="Streamlining Community Management with ServerManager ! ServerManager Logo (LOGO.svg) Building a Dis…" />
+<meta name="description" content="Automating Community Growth with ServerManager Building a Discord community from scratch can be a d…" />
+<meta name="twitter:description" property="og:description" content="Automating Community Growth with ServerManager Building a Discord community from scratch can be a d…" />
 <link rel="canonical" href="http://localhost:4000/projects/2026/03/28/server-manager-discord-bot/" />
 <meta property="og:url" content="http://localhost:4000/projects/2026/03/28/server-manager-discord-bot/" />
 <meta property="og:site_name" content="Shipon’s Portfolio" />
@@ -19,7 +19,7 @@
 <meta name="twitter:title" content="server-manager-discord-bot" />
 <meta property="fb:app_id" content="1988062861858816" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-03-28T15:27:52+06:00","datePublished":"2026-03-28T15:27:52+06:00","description":"Streamlining Community Management with ServerManager ! ServerManager Logo (LOGO.svg) Building a Dis…","headline":"server-manager-discord-bot","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/projects/2026/03/28/server-manager-discord-bot/"},"url":"http://localhost:4000/projects/2026/03/28/server-manager-discord-bot/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-03-28T15:27:52+06:00","datePublished":"2026-03-28T15:27:52+06:00","description":"Automating Community Growth with ServerManager Building a Discord community from scratch can be a d…","headline":"server-manager-discord-bot","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/projects/2026/03/28/server-manager-discord-bot/"},"url":"http://localhost:4000/projects/2026/03/28/server-manager-discord-bot/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Shipon&apos;s Portfolio" /></head>
 <body><header
@@ -45,7 +45,7 @@
       </a>
     </div>
 
-    <nav class="custom-terminal-nav"><div class="nav-items" style="display: flex; gap: 20px; margin-bottom: 20px"><a
+    <nav class="custom-terminal-nav"><div class="nav-items" style="display: flex; gap: 20px; align-items: center"><a
     class="nav-item"
     href="/about/"
     style="text-decoration: none; font-weight: bold"
@@ -67,85 +67,70 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h1 id="streamlining-community-management-with-servermanager">Streamlining Community Management with ServerManager</h1>
+    <h1 id="automating-community-growth-with-servermanager">Automating Community Growth with ServerManager</h1>
+
+<p>Building a Discord community from scratch can be a daunting task. Manually creating dozens of channels, organizing them into categories, configuring roles with specific permissions, and setting up welcome protocols takes hours of tedious work. I created <strong>ServerManager</strong> to eliminate this friction, providing a powerful tool that handles the heavy lifting of server administration for you.</p>
 
 <p><img src="LOGO.svg" alt="ServerManager Logo" /></p>
 
-<p>Building a Discord community from scratch can be a tedious process. Manually creating dozens of channels, organizing them into categories, assigning specific permissions to roles, and drafting welcome messages takes hours of repetitive work. I created <strong>ServerManager</strong> to eliminate this friction.</p>
-
-<p>ServerManager is a comprehensive Discord bot designed to handle the heavy lifting of server administration. My goal was to build a tool that allows administrators to deploy a fully organized community structure in seconds rather than hours.</p>
-
 <h2 id="what-is-servermanager">What is ServerManager?</h2>
 
-<p>At its core, ServerManager is an automation engine for Discord servers. Instead of clicking through the server settings menu repeatedly, I’ve implemented a system where you can trigger complex server architectures using simple commands. Whether you are starting a gaming clan, a professional trading community, or a hobbyist group, ServerManager provides the blueprint and the tools to maintain order.</p>
+<p>ServerManager is a comprehensive Discord bot designed to automate the architectural setup and daily moderation of a server. Instead of manual configuration, I have implemented a template-based system that allows users to deploy an entire server structure—including roles and channels—with a single command.</p>
+
+<p>Beyond initial setup, it serves as a lightweight moderation suite to ensure your community remains healthy and organized as it grows.</p>
 
 <h2 id="key-features">Key Features</h2>
 
-<h3 id="-instant-server-deployment">🎯 Instant Server Deployment</h3>
-<p>The standout feature is the <code class="language-plaintext highlighter-rouge">!setup</code> command. I have integrated a template-based system that allows you to create entire server structures—including categories, channels, and roles—instantly.</p>
+<h3 id="-rapid-server-deployment">🎯 Rapid Server Deployment</h3>
+<p>The core of ServerManager is the <code class="language-plaintext highlighter-rouge">!setup</code> command. I’ve designed this to allow users to instantiate entire communities based on JSON templates.</p>
 <ul>
-  <li><strong>Dynamic Naming:</strong> You can customize your server’s identity on the fly using the <code class="language-plaintext highlighter-rouge">--name</code> flag.</li>
-  <li><strong>Pre-built Templates:</strong> I include templates like <code class="language-plaintext highlighter-rouge">default.json</code> for basic communities and <code class="language-plaintext highlighter-rouge">template.json</code> for bot-centric showcases.</li>
-  <li><strong>Custom Templates:</strong> I’ve made the system extensible. You can create your own JSON templates in the <code class="language-plaintext highlighter-rouge">templates/</code> folder to define exactly how your channels and roles should be configured.</li>
+  <li><strong>Pre-built Templates:</strong> I include options like <code class="language-plaintext highlighter-rouge">default.json</code> for basic communities and <code class="language-plaintext highlighter-rouge">template.json</code> for bot-focused showcase servers.</li>
+  <li><strong>Dynamic Naming:</strong> Using the <code class="language-plaintext highlighter-rouge">--name</code> flag, you can customize the server name during the setup process.</li>
+  <li><strong>Custom Templates:</strong> I’ve made the system extensible. You can create your own JSON templates in the <code class="language-plaintext highlighter-rouge">templates/</code> folder to define specific categories, text/voice channels (including initial welcome messages), and roles with precise hex colors and permissions.</li>
 </ul>
 
-<h3 id="️-robust-moderation-suite">⚔️ Robust Moderation Suite</h3>
-<p>Managing a growing community requires firm boundaries. I have built a full suite of moderation tools to keep your environment safe:</p>
+<h3 id="️-integrated-moderation--governance">🛡️ Integrated Moderation &amp; Governance</h3>
+<p>To keep the community safe, I integrated a suite of admin tools:</p>
 <ul>
-  <li><strong>Standard Actions:</strong> Quick commands for <code class="language-plaintext highlighter-rouge">!kick</code>, <code class="language-plaintext highlighter-rouge">!ban</code>, and <code class="language-plaintext highlighter-rouge">!mute</code>.</li>
-  <li><strong>Automated Warning System:</strong> To reduce manual overhead, I implemented a warning system where users are automatically kicked after receiving three warnings (<code class="language-plaintext highlighter-rouge">!warn</code>).</li>
-  <li><strong>Administrative Utilities:</strong> The <code class="language-plaintext highlighter-rouge">.say</code> command allows admins to send anonymous messages, and <code class="language-plaintext highlighter-rouge">!welcomechannel</code> lets you toggle automated welcome embeds to greet new members.</li>
+  <li><strong>Standard Moderation:</strong> Quick commands for <code class="language-plaintext highlighter-rouge">!kick</code>, <code class="language-plaintext highlighter-rouge">!ban</code>, and <code class="language-plaintext highlighter-rouge">!mute</code>.</li>
+  <li><strong>Automated Warning System:</strong> I implemented a strike-based system. Using <code class="language-plaintext highlighter-rouge">!warn</code>, the bot tracks member infractions and automatically kicks users once they reach three warnings.</li>
+  <li><strong>Anonymous Communication:</strong> The <code class="language-plaintext highlighter-rouge">.say</code> command allows admins to send messages as the bot, which is ideal for official announcements that need a professional, neutral appearance.</li>
 </ul>
 
-<h3 id="️-technical-flexibility">🛠️ Technical Flexibility</h3>
-<p>For those who want to host the bot themselves, I’ve ensured the setup is straightforward. Built on Node.js, the bot leverages Privileged Gateway Intents (Message Content and Server Members) to ensure that automation and moderation happen in real-time without lag.</p>
+<h3 id="-member-onboarding">👋 Member Onboarding</h3>
+<p>First impressions matter. With the <code class="language-plaintext highlighter-rouge">!welcomechannel</code> command, I’ve enabled a way to toggle automated welcome messages. When enabled, new members are greeted with a professional embed, making them feel welcome the moment they join.</p>
 
 <h2 id="potential-use-cases">Potential Use Cases</h2>
 
-<p>I designed ServerManager to be versatile, but it excels in these specific scenarios:</p>
+<p>I built ServerManager to be versatile, but it is particularly effective in the following scenarios:</p>
 
 <ul>
-  <li><strong>Rapid Prototyping:</strong> If you frequently launch “pop-up” servers for events or short-term projects, you can deploy a professional layout in seconds.</li>
-  <li><strong>Standardizing Multiple Servers:</strong> If you manage a network of servers, you can use the same JSON template across all of them to ensure a consistent user experience.</li>
-  <li><strong>New Community Leaders:</strong> For users who aren’t familiar with complex Discord permission hierarchies, my templates provide a “best-practice” starting point.</li>
-  <li><strong>Automated Moderation:</strong> For mid-sized communities that need a lightweight way to track warnings without installing a massive, bloated moderation bot.</li>
+  <li><strong>Gaming Communities:</strong> Quickly deploy a structure with dedicated channels for different games (e.g., Valorant, Minecraft) and voice channels for LFG (Looking For Group).</li>
+  <li><strong>Project Launchpads:</strong> For developers launching a new tool, ServerManager can instantly create support, showcase, and announcement channels.</li>
+  <li><strong>Temporary Event Servers:</strong> If you are hosting a weekend tournament or a short-term event, you can spin up a fully configured server in seconds and tear it down later.</li>
+  <li><strong>Standardizing Brand Presence:</strong> For organizations managing multiple servers, using the same custom JSON template ensures a consistent user experience across all platforms.</li>
 </ul>
 
-<h2 id="summary-of-commands">Summary of Commands</h2>
+<h2 id="getting-started">Getting Started</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">Category</th>
-      <th style="text-align: left">Key Commands</th>
-      <th style="text-align: left">Purpose</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left"><strong>Setup</strong></td>
-      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">!setup</code>, <code class="language-plaintext highlighter-rouge">!welcomechannel</code></td>
-      <td style="text-align: left">Rapidly deploy server layouts and greetings.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><strong>Moderation</strong></td>
-      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">!warn</code>, <code class="language-plaintext highlighter-rouge">!mute</code>, <code class="language-plaintext highlighter-rouge">!ban</code>, <code class="language-plaintext highlighter-rouge">!kick</code></td>
-      <td style="text-align: left">Maintain community standards and safety.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><strong>Admin</strong></td>
-      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">.say</code></td>
-      <td style="text-align: left">Communicate anonymously as the bot.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><strong>General</strong></td>
-      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">!help</code>, <code class="language-plaintext highlighter-rouge">!ping</code>, <code class="language-plaintext highlighter-rouge">!invite</code></td>
-      <td style="text-align: left">Bot utility and support.</td>
-    </tr>
-  </tbody>
-</table>
+<p>If you want to deploy ServerManager, you will need Node.js (v16+) and a bot token from the Discord Developer Portal.</p>
 
-<p>ServerManager takes the “work” out of server administration, allowing you to focus on the actual community engagement rather than the configuration menus.</p>
+<ol>
+  <li><strong>Clone and Install:</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/Evilman34/template-bot.git
+<span class="nb">cd </span>template-bot
+npm <span class="nb">install</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>Configure:</strong> Create a <code class="language-plaintext highlighter-rouge">.env</code> file with your <code class="language-plaintext highlighter-rouge">DISCORD_TOKEN</code>.</li>
+  <li><strong>Permissions:</strong> Ensure you enable the <strong>Message Content Intent</strong> and <strong>Server Members Intent</strong> in the Developer Portal.</li>
+  <li><strong>Launch:</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm start
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Once online, simply use <code class="language-plaintext highlighter-rouge">!setup</code> to begin transforming your server.</p>
 
   </div><a class="u-url" href="/projects/2026/03/28/server-manager-discord-bot/" hidden></a>
 </article>
@@ -553,6 +538,25 @@
   .home,
   .post-list {
     background-color: transparent !important;
+  }
+
+  /* ── Post list items ── */
+  .post-list li {
+    border: 1px solid #003300 !important;
+    border-left: 3px solid #00ff00 !important;
+    background-color: rgba(0, 20, 0, 0.35) !important;
+    padding: 16px 20px !important;
+    margin-bottom: 16px !important;
+    list-style: none !important;
+    border-radius: 4px !important;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+  .post-list li:hover {
+    border-color: #005500 !important;
+    border-left-color: #00ff00 !important;
+    background-color: rgba(0, 30, 0, 0.5) !important;
   }
 
   hr {

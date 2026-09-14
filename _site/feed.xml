@@ -1,4 +1,188 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2026-09-14T20:30:28+06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Shipon’s Portfolio</title><subtitle>A blog about my personal thoughts, experiences, and projects.</subtitle><entry><title type="html">https://github.com/shorifsimec/shipon.github.io</title><link href="http://localhost:4000/projects/2026/09/10/shipon.top/" rel="alternate" type="text/html" title="https://github.com/shorifsimec/shipon.github.io" /><published>2026-09-10T23:39:58+06:00</published><updated>2026-09-10T23:39:58+06:00</updated><id>http://localhost:4000/projects/2026/09/10/shipon.top</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/10/shipon.top/"><![CDATA[<h1 id="automating-my-technical-blog-with-ai-and-github-actions">Automating My Technical Blog with AI and GitHub Actions</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2026-09-14T20:33:12+06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Shipon’s Portfolio</title><subtitle>A blog about my personal thoughts, experiences, and projects.</subtitle><entry><title type="html">ai-jekyll-posts-generation-action</title><link href="http://localhost:4000/projects/2026/09/11/ai-jekyll-posts-generation-action/" rel="alternate" type="text/html" title="ai-jekyll-posts-generation-action" /><published>2026-09-11T15:58:44+06:00</published><updated>2026-09-11T15:58:44+06:00</updated><id>http://localhost:4000/projects/2026/09/11/ai-jekyll-posts-generation-action</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/11/ai-jekyll-posts-generation-action/"><![CDATA[<h1 id="automating-my-portfolio-turning-repositories-into-blog-posts">Automating My Portfolio: Turning Repositories into Blog Posts</h1>
+
+<p>Maintaining a technical blog can be a daunting task. Often, the hardest part isn’t the coding itself, but the effort required to document projects, write summaries, and keep a portfolio up to date. I wanted a way to bridge the gap between my active development on GitHub and my public-facing blog without spending hours manually writing updates.</p>
+
+<p>To solve this, I created the <strong>Automated Repo Article Generator</strong>.</p>
+
+<h2 id="what-is-the-automated-repo-article-generator">What is the Automated Repo Article Generator?</h2>
+
+<p>The Automated Repo Article Generator is a GitHub Action designed to turn my public code repositories into high-quality blog content automatically. It scans my public repositories, analyzes the <code class="language-plaintext highlighter-rouge">README.md</code> files, and uses the power of AI to synthesize that technical documentation into a comprehensive blog article. These articles are then published directly to my Jekyll-based blog as dated markdown files in the <code class="language-plaintext highlighter-rouge">_posts</code> directory.</p>
+
+<h2 id="how-it-works">How It Works</h2>
+
+<p>I have designed the system to be entirely “set and forget.” The workflow follows a precise logic to ensure the blog remains current without creating redundant content:</p>
+
+<ol>
+  <li><strong>Repository Scanning:</strong> The action fetches all my public, non-archived repositories.</li>
+  <li><strong>Change Detection:</strong> It compares the last commit date of each repository against the date of any existing blog post for that project.</li>
+  <li><strong>AI Generation:</strong> If a repository has new activity, the action sends the <code class="language-plaintext highlighter-rouge">README.md</code> content to Ollama Cloud (specifically utilizing the <code class="language-plaintext highlighter-rouge">gemma4:31b-cloud</code> model) to generate a professional article.</li>
+  <li><strong>Automated Publishing:</strong> The generated content is formatted with Jekyll frontmatter and saved as a <code class="language-plaintext highlighter-rouge">_posts/YYYY-MM-DD-repo-name.md</code> file.</li>
+  <li><strong>Portfolio Maintenance:</strong> To keep the blog clean, the action automatically removes posts for repositories that have been deleted.</li>
+  <li><strong>Deployment:</strong> All new posts and deletions are committed and pushed back to the repository automatically.</li>
+</ol>
+
+<h2 id="key-features">Key Features</h2>
+
+<h3 id="smart-update-logic">Smart Update Logic</h3>
+<p>I didn’t want my blog to be flooded with duplicate posts. The generator includes intelligent filtering:</p>
+<ul>
+  <li><strong>Commit-Based Updates:</strong> It only processes repositories that have had a commit newer than the existing post.</li>
+  <li><strong>Automatic Cleanup:</strong> It synchronizes the blog with my current GitHub state by deleting posts for removed repos.</li>
+  <li><strong>Validation:</strong> It silently skips any repositories that lack a <code class="language-plaintext highlighter-rouge">README.md</code>, ensuring only documented projects are featured.</li>
+</ul>
+
+<h3 id="seamless-jekyll-integration">Seamless Jekyll Integration</h3>
+<p>The output is perfectly formatted for Jekyll, including:</p>
+<ul>
+  <li><strong>Frontmatter:</strong> Automatic generation of layout, title, date, and categories.</li>
+  <li><strong>Excerpts:</strong> It automatically generates a 100-character excerpt for the blog’s landing page.</li>
+</ul>
+
+<h2 id="potential-use-cases">Potential Use Cases</h2>
+
+<p>This tool is ideal for several different scenarios:</p>
+
+<ul>
+  <li><strong>Developer Portfolios:</strong> If you have dozens of small projects and want a blog that automatically highlights your latest work.</li>
+  <li><strong>Open Source Maintainers:</strong> To automatically announce updates or provide high-level summaries of project changes to a non-technical audience.</li>
+  <li><strong>Learning Journals:</strong> For those who use GitHub to track their learning progress and want a mirrored blog reflecting their growth.</li>
+</ul>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>For those looking to implement this in their own Jekyll blog, the setup is straightforward:</p>
+
+<ol>
+  <li><strong>API Key:</strong> Obtain an API key from <a href="https://ollama.com">Ollama Cloud</a> and add it to your GitHub Secrets as <code class="language-plaintext highlighter-rouge">OLLAMA_API_KEY</code>.</li>
+  <li><strong>Permissions:</strong> Enable “Read and write permissions” in your repository’s Action settings.</li>
+  <li><strong>Workflow Configuration:</strong> Add a <code class="language-plaintext highlighter-rouge">.github/workflows/generate-posts.yml</code> file using the following configuration:</li>
+</ol>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Daily Repo Article Generator</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">schedule</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">cron</span><span class="pi">:</span> <span class="s2">"</span><span class="s">0</span><span class="nv"> </span><span class="s">8</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span> <span class="c1"># Runs daily at 8 AM UTC</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span>
+
+<span class="na">permissions</span><span class="pi">:</span>
+  <span class="na">contents</span><span class="pi">:</span> <span class="s">write</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">generate</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout repository</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Generate blog posts</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">nishadnyc/ai-jekyll-posts-generation-action@v1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">ollama-api-key</span><span class="pi">:</span> <span class="s">$</span>
+</code></pre></div></div>
+
+<p>By automating the documentation process, I can focus on writing code while my blog handles the storytelling.</p>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Automating My Portfolio: Turning Repositories into Blog Posts Maintaining a technical blog can be a...]]></summary></entry><entry><title type="html">nishadnyc.github.io</title><link href="http://localhost:4000/projects/2026/09/11/nishadnyc.github.io/" rel="alternate" type="text/html" title="nishadnyc.github.io" /><published>2026-09-11T06:50:20+06:00</published><updated>2026-09-11T06:50:20+06:00</updated><id>http://localhost:4000/projects/2026/09/11/nishadnyc.github.io</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/11/nishadnyc.github.io/"><![CDATA[<h1 id="automating-my-technical-portfolio-with-ai">Automating My Technical Portfolio with AI</h1>
+
+<p>Maintaining a personal blog and portfolio is a constant struggle for developers. Often, the code is written and the project is shipped, but the documentation and the “story” behind the build never make it to the website because manual writing is time-consuming. To solve this, I built a system that bridges the gap between my GitHub activity and my public portfolio.</p>
+
+<h2 id="what-is-this-project">What is this Project?</h2>
+
+<p>I have developed an automated pipeline that transforms my GitHub repositories into full-blown blog articles. Instead of manually drafting posts every time I complete a project or update a repository, I use an AI-driven engine that analyzes my code and generates descriptive, engaging content automatically.</p>
+
+<p>The core of this project is a seamless integration between GitHub’s ecosystem and Large Language Models (LLMs), ensuring that my portfolio stays current without requiring daily manual updates.</p>
+
+<h2 id="how-it-works">How it Works</h2>
+
+<p>The intelligence of the system lies in its automation. I leverage <strong>GitHub Workflows</strong> to handle the heavy lifting. By configuring a <strong>cron job</strong>, the system triggers once every day to scan my repositories for new activity or updates.</p>
+
+<p>Once the workflow is triggered, the system:</p>
+<ol>
+  <li>Scans my GitHub repositories.</li>
+  <li>Feeds the relevant project data into an AI model.</li>
+  <li>Generates a comprehensive blog article based on the repository’s contents.</li>
+  <li>Updates my portfolio website with the new content.</li>
+</ol>
+
+<h2 id="key-features">Key Features</h2>
+
+<ul>
+  <li><strong>AI-Powered Content Generation:</strong> No more writer’s block. The AI analyzes the technical aspects of my repositories to write accurate articles.</li>
+  <li><strong>Fully Automated Pipeline:</strong> Through the use of GitHub Actions, the entire process from repository scan to publication happens in the background.</li>
+  <li><strong>Daily Synchronization:</strong> The built-in cron job ensures that my portfolio is never out of date; if I push code today, the world can read about it tomorrow.</li>
+  <li><strong>Hands-Off Maintenance:</strong> I can focus entirely on coding and building, while the system handles the marketing and documentation of my work.</li>
+</ul>
+
+<h2 id="potential-use-cases">Potential Use Cases</h2>
+
+<p>While I am using this for my personal portfolio, this architecture opens up several possibilities:</p>
+
+<ul>
+  <li><strong>Developer Portfolios:</strong> For engineers who want to showcase their active contributions without spending hours writing summaries.</li>
+  <li><strong>Project Changelogs:</strong> Automatically turning commit histories into readable “What’s New” posts for users.</li>
+  <li><strong>Technical Documentation:</strong> Generating high-level overviews of complex codebases for stakeholders or new contributors.</li>
+  <li><strong>Activity Tracking:</strong> Creating a public record of learning progress and technical growth over time.</li>
+</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Automating My Technical Portfolio with AI Maintaining a personal blog and portfolio is a constant s...]]></summary></entry><entry><title type="html">ai-telegram-chat-automation-bot</title><link href="http://localhost:4000/projects/2026/09/11/ai-telegram-chat-automation-bot/" rel="alternate" type="text/html" title="ai-telegram-chat-automation-bot" /><published>2026-09-11T02:34:28+06:00</published><updated>2026-09-11T02:34:28+06:00</updated><id>http://localhost:4000/projects/2026/09/11/ai-telegram-chat-automation-bot</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/11/ai-telegram-chat-automation-bot/"><![CDATA[<h1 id="automating-conversations-my-telegram-ai-auto-reply-bot">Automating Conversations: My Telegram AI Auto-Reply Bot</h1>
+
+<p>Managing a high volume of messages on Telegram can be overwhelming, whether you are running a business, providing technical support, or simply trying to keep up with a busy personal inbox. To solve this, I built the <strong>Telegram AI Auto-Reply Bot</strong>, a powerful automation tool that connects your Telegram account to AI models to handle conversations on your behalf.</p>
+
+<p>The goal of this project was to create a system that doesn’t just send canned responses, but actually understands context, maintains a specific personality, and operates with a human-like cadence.</p>
+
+<h2 id="what-the-bot-does">What the Bot Does</h2>
+
+<p>My bot acts as an intelligent intermediary for your Telegram account. Once connected, it monitors incoming messages and generates thoughtful, context-aware replies using either local or cloud-based AI models via Ollama.</p>
+
+<p>Rather than simple keyword matching, the bot leverages Large Language Models (LLMs) to ensure that the conversation flows naturally. It can manage multiple accounts simultaneously, allowing me to assign different AI personalities to different profiles depending on the intended use case.</p>
+
+<h2 id="key-features">Key Features</h2>
+
+<p>I designed this bot with a focus on control and realism. Here are the standout features:</p>
+
+<h3 id="-customizable-ai-behavior">🧠 Customizable AI Behavior</h3>
+<p>Through a dedicated <code class="language-plaintext highlighter-rouge">/settings</code> panel, I can fully define how the AI interacts. This includes:</p>
+<ul>
+  <li><strong>System Instructions</strong>: I can set the tone, knowledge base, and boundaries (e.g., “You are a professional support agent who is friendly but concise”).</li>
+  <li><strong>Model Selection</strong>: The bot supports both local Ollama instances for privacy and Ollama Cloud for higher performance.</li>
+  <li><strong>Context Management</strong>: The bot remembers previous interactions and uses auto-summarization for long threads, ensuring the AI doesn’t lose the plot of the conversation.</li>
+</ul>
+
+<h3 id="-human-like-interaction">🕒 Human-Like Interaction</h3>
+<p>To prevent the bot from feeling like a cold machine, I implemented several “humanizing” features:</p>
+<ul>
+  <li><strong>Randomized Reply Delays</strong>: I can enable delays (between 15–80 seconds) so that replies don’t appear instantaneously.</li>
+  <li><strong>Message Batching</strong>: Instead of replying to every single bubble in a rapid-fire sequence, the bot combines multiple incoming messages into one cohesive response.</li>
+</ul>
+
+<h3 id="️-management-tools">🛠️ Management Tools</h3>
+<ul>
+  <li><strong>Custom Overrides</strong>: If I need to step in, I can queue custom replies to override the AI for specific chats.</li>
+  <li><strong>Chat Oversight</strong>: I can view all active conversations and clear history on a per-chat basis to reset the AI’s context.</li>
+  <li><strong>Concurrency Control</strong>: For those running the bot on local hardware, I’ve implemented graceful handling of hardware limits to ensure the system doesn’t crash under heavy load.</li>
+</ul>
+
+<h2 id="potential-use-cases">Potential Use Cases</h2>
+
+<p>I envision this tool being incredibly useful across several domains:</p>
+
+<ul>
+  <li><strong>Customer Service</strong>: Providing 24/7 instant responses to routine inquiries while maintaining a consistent brand voice.</li>
+  <li><strong>Personal Assistant</strong>: Managing a personal inbox by filtering requests or answering common questions based on a set of personal rules.</li>
+  <li><strong>Lead Generation</strong>: Engaging potential clients immediately upon their first message, ensuring no lead goes cold.</li>
+  <li><strong>Multi-Account Branding</strong>: Running several different business personas from a single centralized bot controller.</li>
+</ul>
+
+<h2 id="technical-architecture">Technical Architecture</h2>
+
+<p>From a development perspective, this project serves as a showcase of production-grade Node.js patterns. I built it using a multi-tenant architecture to support many users within a single codebase.</p>
+
+<p>Key technical implementations include:</p>
+<ul>
+  <li><strong>Async Queue Management</strong>: Per-chat processing pipelines to ensure messages are handled in the correct order.</li>
+  <li><strong>Atomic Persistence</strong>: I used atomic file-based persistence, removing the need for a complex database setup while ensuring data integrity.</li>
+  <li><strong>Stateful UI</strong>: The use of Telegram callback buttons to create an interactive, state-driven settings panel.</li>
+  <li><strong>Streaming Integration</strong>: Seamless integration with Ollama for real-time AI inference.</li>
+</ul>
+
+<p>By combining Telegram’s Bot API with local AI, I’ve created a system that offers total control over data and instructions without being locked into proprietary, expensive APIs.</p>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Automating Conversations: My Telegram AI Auto-Reply Bot Managing a high volume of messages on Teleg...]]></summary></entry><entry><title type="html">https://github.com/shorifsimec/shipon.github.io</title><link href="http://localhost:4000/projects/2026/09/10/shipon.top/" rel="alternate" type="text/html" title="https://github.com/shorifsimec/shipon.github.io" /><published>2026-09-10T23:39:58+06:00</published><updated>2026-09-10T23:39:58+06:00</updated><id>http://localhost:4000/projects/2026/09/10/shipon.top</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/10/shipon.top/"><![CDATA[<h1 id="automating-my-technical-blog-with-ai-and-github-actions">Automating My Technical Blog with AI and GitHub Actions</h1>
 
 <p>Maintaining a personal portfolio and blog is a challenge for any developer. The struggle isn’t usually the desire to share knowledge, but the time it takes to manually document every project, update feature lists, and write comprehensive articles for every new repository. To solve this, I built a system that transforms my GitHub activity into a living, breathing blog.</p>
 
@@ -37,445 +221,316 @@
   <li><strong>Automatic Documentation:</strong> Turning repository changes into “What’s New” logs for users.</li>
   <li><strong>Developer Portfolios:</strong> Helping other developers showcase their work without the friction of manual writing.</li>
   <li><strong>Project Tracking:</strong> Maintaining a daily diary of technical progress across multiple disparate repositories.</li>
-</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Automating My Technical Blog with AI and GitHub Actions Maintaining a personal portfolio and blog i...]]></summary></entry><entry><title type="html">nishad.top</title><link href="http://localhost:4000/projects/2026/09/10/nishad.top/" rel="alternate" type="text/html" title="nishad.top" /><published>2026-09-10T15:12:14+06:00</published><updated>2026-09-10T15:12:14+06:00</updated><id>http://localhost:4000/projects/2026/09/10/nishad.top</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/10/nishad.top/"><![CDATA[<h1 id="automating-my-technical-writing-a-self-generating-portfolio">Automating My Technical Writing: A Self-Generating Portfolio</h1>
+</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Automating My Technical Blog with AI and GitHub Actions Maintaining a personal portfolio and blog i...]]></summary></entry><entry><title type="html">Github-Stats-Card</title><link href="http://localhost:4000/projects/2026/09/10/github-stats-card/" rel="alternate" type="text/html" title="Github-Stats-Card" /><published>2026-09-10T14:50:48+06:00</published><updated>2026-09-10T14:50:48+06:00</updated><id>http://localhost:4000/projects/2026/09/10/github-stats-card</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/10/github-stats-card/"><![CDATA[<h1 id="elevate-your-profile-with-the-github-stats-card-generator">Elevate Your Profile with the GitHub Stats Card Generator</h1>
 
-<p>Maintaining a personal blog and portfolio is a constant struggle for developers. I often find myself deep in the flow of coding, committing features and fixing bugs, but I rarely have the time to sit down and write a comprehensive article explaining what I’ve actually built. To solve this, I built a system that turns my active development into published content automatically.</p>
+<p>Your GitHub profile is often the first thing recruiters, collaborators, and fellow developers see. While the standard contribution graph is useful, I wanted to create something more visually striking and dynamic to showcase a developer’s journey. That is why I built the <strong>GitHub Stats Card Generator</strong>.</p>
 
-<h2 id="what-is-this-project">What is this Project?</h2>
+<p>The GitHub Stats Card Generator is a tool designed to create stunning, animated stats cards that integrate seamlessly into your GitHub profile README. It transforms raw API data into a polished, professional visual summary of your coding activity.</p>
 
-<p>This project is the engine behind my personal blog and portfolio website. Rather than manually drafting posts, I have implemented an AI-driven pipeline that monitors my GitHub repositories and transforms my code changes into readable blog articles.</p>
+<h2 id="the-purpose-beyond-the-green-squares">The Purpose: Beyond the Green Squares</h2>
 
-<p>By leveraging the power of Large Language Models (LLMs) and GitHub Actions, my website effectively writes itself based on the actual work I am doing in real-time.</p>
-
-<h2 id="how-it-works">How It Works</h2>
-
-<p>The core of this system is a fully automated workflow that removes the friction between “coding” and “documenting.”</p>
-
-<ol>
-  <li><strong>Daily Scanning</strong>: I utilize GitHub Workflow cron jobs configured to run once every day.</li>
-  <li><strong>Repository Analysis</strong>: The system scans my GitHub repositories to identify new activity, updates, or completed projects.</li>
-  <li><strong>AI Generation</strong>: Using an AI model, the system analyzes the codebase and the changes made, then synthesizes that technical data into a structured blog post.</li>
-  <li><strong>Auto-Publishing</strong>: The generated content is then pushed to my portfolio site, ensuring my public presence is always up-to-date with my latest technical achievements.</li>
-</ol>
+<p>The goal of this project was to move beyond static numbers. I wanted to provide a way for developers to highlight their achievements—such as their longest streaks and top languages—using a high-impact visual format. By combining real-time data with fluid animations, these cards turn a standard profile into a personalized portfolio.</p>
 
 <h2 id="key-features">Key Features</h2>
 
-<ul>
-  <li><strong>Zero-Touch Content Creation</strong>: I no longer need to manually write “What’s new” posts; the AI handles the drafting process.</li>
-  <li><strong>GitHub Integration</strong>: The system is tightly coupled with my version control, meaning the blog is a direct reflection of my commit history.</li>
-  <li><strong>Scheduled Updates</strong>: Through the use of cron jobs, the site remains fresh without requiring me to trigger deployments manually.</li>
-  <li><strong>AI-Powered Synthesis</strong>: The system doesn’t just list commits; it uses an AI model to explain the purpose and functionality of the code.</li>
-</ul>
-
-<h2 id="potential-use-cases">Potential Use Cases</h2>
-
-<p>While I built this for my personal portfolio, this architecture has several applications for other developers and teams:</p>
-
-<ul>
-  <li><strong>Automatic Changelogs</strong>: Transforming raw commit messages into user-friendly release notes for clients.</li>
-  <li><strong>Developer Portfolios</strong>: Helping engineers who struggle with writing maintain a consistent online presence that proves their activity.</li>
-  <li><strong>Internal Documentation</strong>: Keeping internal team wikis updated by automatically summarizing changes in a private repository.</li>
-  <li><strong>Project Tracking</strong>: Creating a daily diary of a project’s evolution for stakeholders to follow without needing to read through git logs.</li>
-</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Automating My Technical Writing: A Self-Generating Portfolio Maintaining a personal blog and portfo...]]></summary></entry><entry><title type="html">Github-Stats-Card</title><link href="http://localhost:4000/projects/2026/09/10/github-stats-card/" rel="alternate" type="text/html" title="Github-Stats-Card" /><published>2026-09-10T14:50:48+06:00</published><updated>2026-09-10T14:50:48+06:00</updated><id>http://localhost:4000/projects/2026/09/10/github-stats-card</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/10/github-stats-card/"><![CDATA[<h1 id="elevate-your-profile-with-the-github-stats-card-generator">Elevate Your Profile with the GitHub Stats Card Generator</h1>
-
-<p>Your GitHub profile is often the first place potential employers, collaborators, and fellow developers look to understand your coding habits and expertise. While the standard contribution graph is great, I wanted to create something more visually striking and dynamic. That is why I built the <strong>GitHub Stats Card Generator</strong>.</p>
-
-<p>My goal was to create a tool that allows anyone to transform their raw GitHub data into a stunning, animated visual card that can be embedded directly into a profile README.</p>
-
-<h2 id="what-is-the-github-stats-card-generator">What is the GitHub Stats Card Generator?</h2>
-
-<p>The GitHub Stats Card Generator is a web-based tool that pulls real-time data from the GitHub REST API to create a personalized statistics card. Unlike static images, these cards feature fluid animations—specifically a water ripple effect—and a highly customizable design system to match any personal brand or aesthetic.</p>
-
-<p>You can try it out live here: <a href="https://github-stats.nishad.top">https://github-stats.nishad.top</a></p>
-
-<h2 id="key-features">Key Features</h2>
-
-<p>I have packed the generator with features that go beyond simple numbers, focusing on both data and design:</p>
+<p>I have packed the generator with several features to ensure every user can find a style that matches their personal brand:</p>
 
 <h3 id="-comprehensive-data-tracking">📊 Comprehensive Data Tracking</h3>
-<p>The cards provide a snapshot of your activity, including:</p>
+<p>The cards don’t just show one metric; they provide a holistic view of your activity:</p>
 <ul>
-  <li><strong>Live Current Stats:</strong> Up-to-the-minute data on your activity.</li>
-  <li><strong>Streak Tracker:</strong> Highlights your longest contribution streak to showcase consistency.</li>
-  <li><strong>Contribution Metrics:</strong> Total and yearly contribution counts.</li>
-  <li><strong>Social Proof:</strong> Displays your total public repositories, stars received, and followers.</li>
-  <li><strong>Language Analysis:</strong> A visually ranked language bar showing the technologies you use most.</li>
+  <li><strong>Live Current Stats:</strong> Real-time updates on your GitHub activity.</li>
+  <li><strong>Streak Tracking:</strong> A dedicated tracker for your longest contribution streak.</li>
+  <li><strong>Contribution Metrics:</strong> Detailed breakdowns of yearly and total contributions.</li>
+  <li><strong>Profile Overview:</strong> Quick glances at your public repositories, stars, and followers.</li>
 </ul>
 
-<h3 id="-advanced-visual-customization">🎨 Advanced Visual Customization</h3>
-<p>I believe aesthetics matter, so I included a deep level of customization:</p>
+<h3 id="-visual-excellence--customization">🎨 Visual Excellence &amp; Customization</h3>
+<p>I believe aesthetics matter. To ensure the cards look great on any profile, I included:</p>
 <ul>
-  <li><strong>Animated Effects:</strong> A unique water ripple animation within the streak circle.</li>
-  <li><strong>Themed Presets:</strong> I’ve curated five beautiful themes:
-    <ul>
-      <li><strong>Ocean:</strong> Cool blues and fluid design (the default).</li>
-      <li><strong>Dark:</strong> Elegant high contrast for a professional look.</li>
-      <li><strong>Sunset:</strong> Bold reds and oranges for a high-energy vibe.</li>
-      <li><strong>Forest:</strong> Earthy greens and calm visuals.</li>
-      <li><strong>Purple:</strong> A royal look with soft, sophisticated hues.</li>
-    </ul>
-  </li>
-  <li><strong>Full Granular Control:</strong> You can manually adjust the background, text, accent, border, water, and streak counter colors.</li>
+  <li><strong>Water Ripple Animation:</strong> A unique, fluid animation within the streak circle to add life to the card.</li>
+  <li><strong>Circular Avatar Integration:</strong> Your profile picture is integrated directly into the layout for a personal touch.</li>
+  <li><strong>Diverse Theme Collection:</strong> I’ve pre-built several themes, including <strong>Ocean</strong> (cool blues), <strong>Sunset</strong> (bold reds/oranges), <strong>Forest</strong> (earthy greens), <strong>Purple</strong> (royal hues), and a sleek <strong>Dark</strong> mode.</li>
+  <li><strong>Granular Control:</strong> For those who want total control, you can customize the background, text, accent, border, water effect, and streak counter colors.</li>
 </ul>
 
-<h3 id="️-seamless-integration">🛠️ Seamless Integration</h3>
-<p>To make the tool accessible, I implemented a <strong>README Code Generator</strong>. Once you are happy with your preview, you can simply copy the generated markdown code and paste it into your GitHub profile. I also included an option to export your card as a PNG for use in portfolios or social media.</p>
+<h3 id="️-seamless-workflow">🛠️ Seamless Workflow</h3>
+<p>I wanted the transition from “generation” to “deployment” to be as fast as possible. The tool includes a <strong>README Code Generator</strong>, allowing you to simply copy the generated markdown and paste it directly into your profile. Additionally, users can export their cards as PNGs for use in other portfolios or social media.</p>
 
-<h2 id="layout-overview">Layout Overview</h2>
+<h2 id="layout-breakdown">Layout Breakdown</h2>
 
-<p>The card is structured to be readable yet information-dense, following this general flow:
+<p>The cards are structured to balance information density with readability:
 <code class="language-plaintext highlighter-rouge">[ Circular Avatar ] | [ Animated Streak Circle ] | [ Stats &amp; Languages ]</code></p>
 
-<p>This includes a dedicated profile block with your avatar and join date, a pulsing streak counter, and a detailed breakdown of your repository and language stats.</p>
+<p>This includes a profile block (username and join date), a pulsing streak counter, and a visually ranked language bar that showcases your most-used technologies.</p>
 
 <h2 id="potential-use-cases">Potential Use Cases</h2>
 
+<p>While primarily designed for the GitHub profile README, I see these cards being useful in several scenarios:</p>
 <ul>
-  <li><strong>Personal Branding:</strong> Make your GitHub profile stand out from the crowd to attract recruiters.</li>
-  <li><strong>Portfolio Enhancement:</strong> Embed your live stats in a personal portfolio website to prove your active development status.</li>
-  <li><strong>Gamification:</strong> Use the streak tracker to motivate yourself and others to commit code daily.</li>
-  <li><strong>Community Sharing:</strong> Share your PNG export on Twitter or LinkedIn to celebrate a milestone (like a 100-day streak).</li>
+  <li><strong>Developer Portfolios:</strong> Embedding a live-updating stats card on a personal website to prove active coding habits.</li>
+  <li><strong>Social Media:</strong> Sharing a PNG export of a major milestone (like a 100-day streak) on LinkedIn or X (Twitter).</li>
+  <li><strong>Team Pages:</strong> Using standardized themes to showcase the technical strengths of a development team.</li>
 </ul>
 
-<h2 id="examples-in-action">Examples in Action</h2>
+<h2 id="get-started">Get Started</h2>
 
-<p>Depending on the theme you choose, the vibe of your profile changes instantly. Here are a few examples of what the generator can produce:</p>
+<p>I invite you to try it out for yourself. You can visit the live tool at <a href="https://github-stats.nishad.top">github-stats.nishad.top</a>, enter your username, pick a theme, and elevate your GitHub presence today.</p>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Elevate Your Profile with the GitHub Stats Card Generator Your GitHub profile is often the first th...]]></summary></entry><entry><title type="html">rapid-pro</title><link href="http://localhost:4000/projects/2026/09/09/rapid-pro/" rel="alternate" type="text/html" title="rapid-pro" /><published>2026-09-09T19:23:14+06:00</published><updated>2026-09-09T19:23:14+06:00</updated><id>http://localhost:4000/projects/2026/09/09/rapid-pro</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/rapid-pro/"><![CDATA[<h1 id="streamlining-automated-messaging-with-the-rapidpro-flutter-plugin">Streamlining Automated Messaging with the RapidPro Flutter Plugin</h1>
 
-<p><strong>Ocean Theme</strong>
-<img src="https://github-stats.nishad.top/api/card-with-avatar?username=henry-jackson&amp;theme=%7B%22backgroundColor%22%3A%22%230f172a%22%2C%22textColor%22%3A%22%23e2e8f0%22%2C%22accentColor%22%3A%22%230ea5e9%22%2C%22borderColor%22%3A%22%231e293b%22%2C%22waterColor%22%3A%22%230ea5e9%22%2C%22streakColor%22%3A%22%2306b6d4%22%7D" alt="henry-jackson" /></p>
+<p>In 2021, while contributing to a project for <a href="https://www.unicef.org/">UNICEF</a>, I developed a Flutter plugin designed to bridge the gap between mobile applications and the RapidPro messaging ecosystem. By porting the RapidPro native plugin for Flutter-based apps, I created a tool that allows developers to easily implement RapidPro or <a href="https://textit.in">TextIt</a> Firebase channels.</p>
 
-<p><strong>Purple Theme</strong>
-<img src="https://github-stats.nishad.top/api/card-with-avatar?username=gijzelaerr&amp;theme=%7B%22backgroundColor%22%3A%22%23581c87%22%2C%22textColor%22%3A%22%23f3e8ff%22%2C%22accentColor%22%3A%22%23a855f7%22%2C%22borderColor%22%3A%22%237c3aed%22%2C%22waterColor%22%3A%22%23a855f7%22%2C%22streakColor%22%3A%22%23c084fc%22%7D" alt="gijzelaerr" /></p>
+<h3 id="what-is-rapidpro">What is RapidPro?</h3>
+<p>RapidPro is a classic, flow-based messaging system. Long before the current era of AI-driven chatbots, RapidPro provided a robust way to automate chats through predefined logic flows. This makes it an ideal solution for organizations that need reliable, structured communication without the unpredictability of generative AI.</p>
 
-<p><strong>Sunset Theme</strong>
-<img src="https://github-stats.nishad.top/api/card-with-avatar?username=viktorgardart&amp;theme=%7B%22backgroundColor%22%3A%22%23451a03%22%2C%22textColor%22%3A%22%23fef3c7%22%2C%22accentColor%22%3A%22%23f59e0b%22%2C%22borderColor%22%3A%22%2392400e%22%2C%22waterColor%22%3A%22%23f59e0b%22%2C%22streakColor%22%3A%22%23dc2626%22%7D" alt="viktorgardart" /></p>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Elevate Your Profile with the GitHub Stats Card Generator Your GitHub profile is often the first pl...]]></summary></entry><entry><title type="html">nishadnyc</title><link href="http://localhost:4000/projects/2026/09/09/nishadnyc/" rel="alternate" type="text/html" title="nishadnyc" /><published>2026-09-09T23:29:56+06:00</published><updated>2026-09-09T23:29:56+06:00</updated><id>http://localhost:4000/projects/2026/09/09/nishadnyc</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/nishadnyc/"><![CDATA[<h1 id="building-for-the-developer-experience-an-overview-of-nishads-open-source-ecosystem">Building for the Developer Experience: An Overview of Nishad’s Open-Source Ecosystem</h1>
-
-<p>In the modern software landscape, the difference between a good product and a great one often lies in the developer experience (DX) and the efficiency of the underlying pipeline. By focusing on automation, secure utility libraries, and streamlined community management, Nishad has developed a suite of tools designed to solve practical problems for developers and organizations.</p>
-
-<p>From mobile CI/CD pipelines to secure JSON validation, these projects emphasize reliability, reusability, and automation.</p>
-
-<h2 id="streamlining-mobile-delivery-flutter-cicd-build--release">Streamlining Mobile Delivery: Flutter CI/CD Build &amp; Release</h2>
-
-<p>One of the most significant bottlenecks in mobile development is the manual process of building and distributing binaries. The <strong>Flutter CI/CD Build &amp; Release</strong> project solves this by implementing a fully automated GitHub Actions pipeline.</p>
+<h3 id="real-world-impact">Real-World Impact</h3>
+<p>This plugin saw significant real-world application through <a href="https://www.unicef.org/">Unicef.org</a> within their South Asian survey applications. It served as a critical tool for field workers and volunteers who were on the ground collecting and submitting vital data regarding underprivileged women and children. In these environments, the ability to automate data collection through a structured messaging flow is invaluable.</p>
 
 <h3 id="key-features">Key Features</h3>
+<p>The plugin provides a streamlined interface to handle the complexities of the RapidPro Firebase channel. Its primary capabilities include:</p>
+
 <ul>
-  <li><strong>Automated Triggering:</strong> The workflow activates automatically upon pushes or merges into the <code class="language-plaintext highlighter-rouge">main</code> branch.</li>
-  <li><strong>Environment Orchestration:</strong> It handles the setup of Java 17 and the stable Flutter SDK seamlessly.</li>
-  <li><strong>Production-Ready Output:</strong> The pipeline manages dependency installation and builds a production APK.</li>
-  <li><strong>Automated Versioning:</strong> It publishes the resulting APK as a GitHub Release with sequential version tagging (e.g., <code class="language-plaintext highlighter-rouge">v1</code>, <code class="language-plaintext highlighter-rouge">v2</code>, <code class="language-plaintext highlighter-rouge">v3</code>).</li>
+  <li><strong>Seamless Registration:</strong> Quickly register devices and retrieve unique UUIDs for tracking and communication.</li>
+  <li><strong>Flow Triggering:</strong> Ability to initiate specific automated flows using a Flow UUID, allowing the app to jump directly into a predefined interaction sequence.</li>
+  <li><strong>Simple Message Dispatch:</strong> A straightforward method to send messages back to the RapidPro server.</li>
+  <li><strong>FCM Integration:</strong> Full compatibility with Firebase Cloud Messaging (FCM) to handle incoming messages in real-time.</li>
 </ul>
 
-<h3 id="use-case">Use Case</h3>
-<p>This project is ideal for small to medium-sized teams or solo developers who want to eliminate the “it works on my machine” syndrome and ensure that every merge to production is automatically packaged and archived.</p>
+<h3 id="implementation-guide">Implementation Guide</h3>
 
-<hr />
+<p>To get started, you first need to integrate Firebase into your project following the standard <a href="https://firebase.google.com/docs/ios/setup">iOS</a> and <a href="https://firebase.google.com/docs/android/setup">Android</a> setup guides.</p>
 
-<h2 id="data-integrity-with-json-format-validator">Data Integrity with JSON Format Validator</h2>
-
-<p>Handling external data in Node.js often introduces security risks, such as prototype pollution or application crashes due to malformed strings. The <strong>JSON Format Validator</strong> is a lightweight utility designed to make JSON processing safe and predictable.</p>
-
-<h3 id="key-features-1">Key Features</h3>
-<ul>
-  <li><strong>Security First:</strong> Includes built-in protection against prototype pollution and configurable payload-size limits.</li>
-  <li><strong>Flexible Formatting:</strong> Supports custom indentation and tab formatting for better readability.</li>
-  <li><strong>Versatile Integration:</strong> Provides support for both CommonJS and ES Modules, and integrates easily with Express.js.</li>
-  <li><strong>Robustness:</strong> Designed with fail-safe responses to prevent unhandled exceptions from crashing the server.</li>
-</ul>
-
-<h3 id="use-case-1">Use Case</h3>
-<p>Any Node.js application that consumes third-party API data or user-submitted JSON strings can use this validator to sanitize input before it reaches the core business logic.</p>
-
-<hr />
-
-<h2 id="community-management-servermanagerbot">Community Management: ServerManagerBot</h2>
-
-<p>Managing a growing Discord community requires significant overhead in terms of role assignment and channel organization. <strong>ServerManagerBot</strong> automates the administrative side of community management.</p>
-
-<h3 id="key-features-2">Key Features</h3>
-<ul>
-  <li><strong>Template-Based Setup:</strong> Allows administrators to configure entire servers (categories, channels, and roles) using JSON templates.</li>
-  <li><strong>Automated Moderation:</strong> Includes a comprehensive suite of commands for kicking, banning, muting, and warning users.</li>
-  <li><strong>Behavior Tracking:</strong> Tracks warnings and triggers automatic moderation actions based on user history.</li>
-  <li><strong>Admin Utilities:</strong> Supports anonymous announcements and custom server renaming.</li>
-</ul>
-
-<h3 id="use-case-2">Use Case</h3>
-<p>This bot is perfect for community managers who need to deploy standardized server structures across multiple communities or those who want to reduce the manual workload of moderation.</p>
-
-<hr />
-
-<h2 id="specialized-integration-rapidpro-flutter-plugin">Specialized Integration: RapidPro Flutter Plugin</h2>
-
-<p>Bridging the gap between mobile applications and messaging channels is critical for organizations focused on outreach. The <strong>RapidPro Flutter Plugin</strong> enables the integration of RapidPro and TextIt messaging channels.</p>
-
-<h3 id="key-features-3">Key Features</h3>
-<ul>
-  <li><strong>FCM Integration:</strong> Leverages Firebase Cloud Messaging for channel registration and push notifications.</li>
-  <li><strong>Flow Orchestration:</strong> Supports flow initiation and message sending.</li>
-  <li><strong>Configuration Management:</strong> Handles workspace and contact configurations natively.</li>
-</ul>
-
-<h3 id="use-case-3">Use Case</h3>
-<p>Developed in the context of UNICEF applications, this plugin is designed for high-impact mobile apps that require reliable, scalable messaging channels to communicate with users in various regions.</p>
-
-<hr />
-
-<h2 id="summary-of-technical-expertise">Summary of Technical Expertise</h2>
-
-<p>Across these projects, a consistent focus on the following technical domains is evident:</p>
-
-<ul>
-  <li><strong>Mobile Development:</strong> Advanced Flutter and Dart implementation.</li>
-  <li><strong>Automation:</strong> Expert use of GitHub Actions for CI/CD.</li>
-  <li><strong>Backend Tooling:</strong> Node.js package development and API integration.</li>
-  <li><strong>Web Presence:</strong> Static site generation via Jekyll and GitHub Pages.</li>
-</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Building for the Developer Experience: An Overview of Nishad's Open-Source Ecosystem In the modern...]]></summary></entry><entry><title type="html">rapid-pro</title><link href="http://localhost:4000/projects/2026/09/09/rapid-pro/" rel="alternate" type="text/html" title="rapid-pro" /><published>2026-09-09T19:23:14+06:00</published><updated>2026-09-09T19:23:14+06:00</updated><id>http://localhost:4000/projects/2026/09/09/rapid-pro</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/rapid-pro/"><![CDATA[<h1 id="streamlining-automated-messaging-in-flutter-with-rapidpro">Streamlining Automated Messaging in Flutter with RapidPro</h1>
-
-<p>In 2021, while contributing to a <a href="https://www.unicef.org/">UNICEF</a> application, I recognized a need to bring the power of RapidPro’s native messaging capabilities into the Flutter ecosystem. This led me to develop the <code class="language-plaintext highlighter-rouge">rapidpro</code> plugin—a tool designed to easily implement RapidPro or <a href="https://textit.in">TextIt</a> Firebase channels within Flutter-based mobile apps.</p>
-
-<h2 id="what-is-rapidpro">What is RapidPro?</h2>
-
-<p>RapidPro is a sophisticated, flow-based messaging system. Long before the current wave of AI-driven chatbots, RapidPro provided a way to automate complex chat interactions through predefined flows. It allows organizations to create structured conversation paths to collect data, provide information, or guide users through a specific process without requiring manual intervention for every interaction.</p>
-
-<h2 id="purpose-and-real-world-impact">Purpose and Real-World Impact</h2>
-
-<p>The primary goal of this plugin is to bridge the gap between Flutter applications and RapidPro’s backend via Firebase Cloud Messaging (FCM).</p>
-
-<p>I saw the practical utility of this integration firsthand during its deployment by <a href="https://www.unicef.org/">Unicef.org</a> across South Asia. The plugin was integrated into survey applications used by field workers and volunteers to collect and submit critical data regarding underprivileged women and children. By automating the data collection flow, the plugin helped ensure that vital information was gathered efficiently in the field.</p>
-
-<h2 id="key-features">Key Features</h2>
-
-<p>The plugin provides a streamlined API to handle the three core pillars of a flow-based messaging system: registration, flow initiation, and communication.</p>
-
-<h3 id="1-simple-integration">1. Simple Integration</h3>
-<p>The plugin integrates directly with Firebase. Once you have added Firebase to your iOS and Android projects, you can initialize the <code class="language-plaintext highlighter-rouge">RapidPro</code> class with your server details, channel ID, URN, and FCM token.</p>
-
-<h3 id="2-user-registration">2. User Registration</h3>
-<p>Before a user can interact with a flow, they must be registered. The <code class="language-plaintext highlighter-rouge">register</code> method handles this process, returning a unique UUID upon success, which is essential for tracking the user’s state within the messaging system.</p>
-
-<h3 id="3-flow-triggering">3. Flow Triggering</h3>
-<p>One of the most powerful aspects of RapidPro is the ability to trigger specific “flows.” Using the <code class="language-plaintext highlighter-rouge">startFlow</code> method and a specific Flow UUID, I can programmatically launch a predefined sequence of messages and questions for the user.</p>
-
-<h3 id="4-seamless-messaging">4. Seamless Messaging</h3>
-<p>Beyond automated flows, the plugin allows for direct communication. The <code class="language-plaintext highlighter-rouge">sendMessage</code> method enables the app to send text data back to the RapidPro server with simple success and error callbacks.</p>
-
-<h2 id="potential-use-cases">Potential Use Cases</h2>
-
-<p>While this plugin was born out of a need for humanitarian data collection, its architecture is applicable to various industries:</p>
-
-<ul>
-  <li><strong>Field Research &amp; Surveys:</strong> Ideal for NGOs or research firms collecting structured data in remote areas where streamlined, automated questioning is required.</li>
-  <li><strong>Customer Onboarding:</strong> Creating automated “welcome” flows that guide new users through an app’s features via chat.</li>
-  <li><strong>Healthcare Triage:</strong> Implementing basic symptom-checking flows that collect patient data before they reach a healthcare provider.</li>
-  <li><strong>Government Services:</strong> Automating the application or inquiry process for citizens to receive immediate, flow-based responses.</li>
-</ul>
-
-<h2 id="technical-implementation-quick-start">Technical Implementation Quick-Start</h2>
-
-<p>To get started, I recommend importing the package and creating a singleton instance of the <code class="language-plaintext highlighter-rouge">RapidPro</code> class—ideally managed via a state management solution like Provider or BLoC.</p>
+<h4 id="configuration">Configuration</h4>
+<p>The core of the integration is the <code class="language-plaintext highlighter-rouge">RapidPro</code> class. I designed this to accept all necessary credentials—including the server, channel, URN, FCM token, and workspace token—in a single instance.</p>
 
 <div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="s">'package:rapidpro/rapidpro.dart'</span><span class="o">;</span>
 
 <span class="n">RapidPro</span> <span class="n">rapidPro</span> <span class="o">=</span> <span class="n">RapidPro</span><span class="p">(</span>
 	<span class="nl">server:</span> <span class="s">"textit.in"</span><span class="p">,</span>
-	<span class="nl">channel:</span> <span class="s">"your-channel-id"</span><span class="p">,</span>
-	<span class="nl">urn:</span> <span class="s">"user@example.com"</span><span class="p">,</span>
-	<span class="nl">fcmToken:</span> <span class="s">"your-fcm-token"</span><span class="p">,</span>
-	<span class="nl">workspaceToken:</span> <span class="s">"your-workspace-token"</span><span class="p">,</span>
-	<span class="nl">name:</span> <span class="s">"User Name"</span><span class="p">,</span>
+	<span class="nl">channel:</span> <span class="s">"3gcr67-ascas32-41ac"</span><span class="p">,</span> 
+	<span class="nl">urn:</span> <span class="s">"yourname@example.com"</span><span class="p">,</span> 
+	<span class="nl">fcmToken:</span> <span class="s">"932v983bv298374vb237894v4982828uv2828"</span><span class="p">,</span> 
+	<span class="nl">workspaceToken:</span> <span class="s">"2df472f3942b4v2424284"</span><span class="p">,</span>
+	<span class="nl">name:</span> <span class="s">"John Doe"</span><span class="p">,</span> 
 <span class="p">);</span>
 </code></pre></div></div>
 
-<p>Once initialized, triggering a flow is as simple as:</p>
+<h4 id="essential-operations">Essential Operations</h4>
+<p>Once the instance is created (which I recommend managing via Provider or BLoC), you can perform the following actions:</p>
 
-<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rapidPro</span><span class="o">.</span><span class="na">startFlow</span><span class="p">(</span>
-	<span class="nl">flow:</span> <span class="s">"flow-uuid-here"</span><span class="p">,</span>
-	<span class="nl">onSuccess:</span> <span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* Handle success */</span> <span class="p">},</span>
-	<span class="nl">onError:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* Handle error */</span> <span class="p">}</span>
+<p><strong>1. Device Registration</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rapidPro</span><span class="o">.</span><span class="na">register</span><span class="p">(</span>
+	<span class="nl">onSuccess:</span> <span class="p">(</span><span class="kt">String</span> <span class="n">uuid</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Handle the returned UUID</span>
+	<span class="p">},</span>
+	<span class="nl">onError:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="p">}</span>
 <span class="p">);</span>
-</code></pre></div></div>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Streamlining Automated Messaging in Flutter with RapidPro In 2021, while contributing to a UNICEF (...]]></summary></entry><entry><title type="html">gold-and-dollar-stock-news</title><link href="http://localhost:4000/projects/2026/09/09/gold-and-dollar-stock-news/" rel="alternate" type="text/html" title="gold-and-dollar-stock-news" /><published>2026-09-09T05:41:22+06:00</published><updated>2026-09-09T05:41:22+06:00</updated><id>http://localhost:4000/projects/2026/09/09/gold-and-dollar-stock-news</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/gold-and-dollar-stock-news/"><![CDATA[<h1 id="tracking-the-pulse-of-gold-and-the-dollar-a-specialized-news-aggregator">Tracking the Pulse of Gold and the Dollar: A Specialized News Aggregator</h1>
+</code></pre></div></div>
 
-<p>In the volatile world of financial markets, the inverse relationship between gold and the US Dollar is one of the most critical signals for traders and investors. To stay ahead of market shifts, I developed <strong>gold-and-dollar-stock-news</strong>, a targeted software project designed to aggregate and monitor real-time news specifically centered around these two assets.</p>
+<p><strong>2. Starting a Flow</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rapidPro</span><span class="o">.</span><span class="na">startFlow</span><span class="p">(</span>
+	<span class="nl">flow:</span> <span class="s">"c2v-23c44-2v3424"</span><span class="p">,</span>
+	<span class="nl">onSuccess:</span> <span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Flow started successfully</span>
+	<span class="p">},</span>
+	<span class="nl">onError:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
 
-<h2 id="what-is-gold-and-dollar-stock-news">What is Gold-and-Dollar-Stock-News?</h2>
+<p><strong>3. Sending Messages</strong></p>
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rapidPro</span><span class="o">.</span><span class="na">sendMessage</span><span class="p">(</span>
+	<span class="nl">message:</span> <span class="s">"Hello"</span><span class="p">,</span>
+	<span class="nl">onSuccess:</span> <span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Message sent</span>
+	<span class="p">},</span>
+	<span class="nl">onError:</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Handle error</span>
+	<span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
 
-<p>This project is a specialized news tracking tool built to filter through the noise of general financial media. Rather than browsing broad market headlines, I created this system to isolate stories, reports, and data points that directly impact the valuation of gold and the strength of the US Dollar.</p>
+<h3 id="potential-use-cases">Potential Use Cases</h3>
+<p>Because this plugin transforms a mobile app into a node within a flow-based messaging system, it is particularly useful for:</p>
 
-<p>The primary goal is to provide a streamlined flow of information that allows for quicker sentiment analysis and more informed decision-making regarding precious metals and currency fluctuations.</p>
+<ul>
+  <li><strong>Field Data Collection:</strong> Similar to the UNICEF implementation, it can be used for surveys where field agents must follow a strict set of questions.</li>
+  <li><strong>Automated Onboarding:</strong> Guiding new users through a series of steps via structured chat.</li>
+  <li><strong>Crisis Management:</strong> Deploying rapid, automated communication flows to users in specific regions during emergencies.</li>
+  <li><strong>Healthcare Tracking:</strong> Implementing automated check-ins or medication reminders for patients in remote areas.</li>
+</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Streamlining Automated Messaging with the RapidPro Flutter Plugin In 2021, while contributing to a...]]></summary></entry><entry><title type="html">gold-and-dollar-stock-news</title><link href="http://localhost:4000/projects/2026/09/09/gold-and-dollar-stock-news/" rel="alternate" type="text/html" title="gold-and-dollar-stock-news" /><published>2026-09-09T05:41:22+06:00</published><updated>2026-09-09T05:41:22+06:00</updated><id>http://localhost:4000/projects/2026/09/09/gold-and-dollar-stock-news</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/gold-and-dollar-stock-news/"><![CDATA[<h1 id="gold-and-dollar-stock-news-tracking-global-market-indicators">Gold and Dollar Stock News: Tracking Global Market Indicators</h1>
+
+<p>In the volatile world of financial trading, timing is everything. To make informed decisions, I need a streamlined way to monitor the relationship between gold prices and the US dollar. That is why I developed <strong>gold-and-dollar-stock-news</strong>, a dedicated tool designed to aggregate and track news specifically tailored to these two critical economic indicators.</p>
+
+<h2 id="what-is-this-project">What is this project?</h2>
+
+<p>The gold-and-dollar-stock-news project is a specialized news tracking system. Its primary function is to filter the noise of the general financial markets and focus exclusively on the intersection of precious metals and currency fluctuations. By isolating these specific data streams, I can more easily identify trends and catalysts that drive price movements in these assets.</p>
+
+<h2 id="purpose-and-goals">Purpose and Goals</h2>
+
+<p>The core purpose of this project is to provide a centralized hub for market intelligence. Gold and the US Dollar often share an inverse correlation; when the dollar weakens, gold typically becomes more attractive, and vice versa. I built this tool to:</p>
+
+<ul>
+  <li><strong>Minimize Information Overload:</strong> Instead of scanning broad financial news sites, I can focus on the specific assets that impact my portfolio.</li>
+  <li><strong>Identify Correlations:</strong> By viewing news for both gold and the dollar side-by-side, I can better understand the macroeconomic drivers affecting both.</li>
+  <li><strong>Accelerate Decision Making:</strong> Fast access to relevant news allows for quicker pivots in trading strategies during high-volatility events.</li>
+</ul>
 
 <h2 id="key-features">Key Features</h2>
 
-<p>To ensure the tool is effective for active monitoring, I focused on several core technical capabilities:</p>
+<p>To achieve these goals, I have implemented several key capabilities:</p>
 
 <ul>
-  <li><strong>Asset-Specific Filtering:</strong> The system is tuned to ignore irrelevant market chatter, focusing exclusively on gold and USD-related triggers.</li>
-  <li><strong>Automated Aggregation:</strong> By automating the collection of news, I eliminate the need to manually check multiple financial portals.</li>
-  <li><strong>Real-Time Insights:</strong> The project is designed to capture news as it breaks, providing the speed necessary to react to sudden geopolitical shifts or economic announcements.</li>
+  <li><strong>Targeted News Aggregation:</strong> The system focuses specifically on “Gold” and “Dollar” stock news, ensuring that the feed remains relevant.</li>
+  <li><strong>Market-Specific Filtering:</strong> By narrowing the scope to these indicators, the tool removes irrelevant noise from other sectors like tech or energy.</li>
+  <li><strong>Real-time Monitoring:</strong> The project is designed to keep me updated on the latest headlines as they break, providing a competitive edge in fast-moving markets.</li>
 </ul>
 
 <h2 id="potential-use-cases">Potential Use Cases</h2>
 
-<p>I designed this project to be versatile enough for several different financial strategies:</p>
+<p>This tool is particularly useful for several types of financial analysis:</p>
 
-<h3 id="1-macro-economic-analysis">1. Macro-Economic Analysis</h3>
-<p>For those tracking global inflation and interest rate hikes, this tool provides a direct window into how the market is pricing in the value of the dollar versus the “safe haven” appeal of gold.</p>
+<ul>
+  <li><strong>Hedging Strategies:</strong> For those looking to hedge against inflation or currency devaluation, this tool provides the necessary news context to time entries into gold.</li>
+  <li><strong>Forex Trading:</strong> Traders focusing on USD pairs can use this to monitor the “safe haven” demand for gold as a proxy for market sentiment.</li>
+  <li><strong>Macroeconomic Research:</strong> Analysts studying the Federal Reserve’s impact on the economy can track how interest rate news affects both the dollar’s strength and gold’s valuation.</li>
+</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Gold and Dollar Stock News: Tracking Global Market Indicators In the volatile world of financial tr...]]></summary></entry><entry><title type="html">flutter_cicd_build_release</title><link href="http://localhost:4000/projects/2026/09/09/flutter_cicd_build_release/" rel="alternate" type="text/html" title="flutter_cicd_build_release" /><published>2026-09-09T04:27:55+06:00</published><updated>2026-09-09T04:27:55+06:00</updated><id>http://localhost:4000/projects/2026/09/09/flutter_cicd_build_release</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/flutter_cicd_build_release/"><![CDATA[<h1 id="streamlining-flutter-deployments-with-an-automated-cicd-release-pipeline">Streamlining Flutter Deployments with an Automated CI/CD Release Pipeline</h1>
 
-<h3 id="2-trading-signal-validation">2. Trading Signal Validation</h3>
-<p>Traders often look for a “break” in the typical inverse correlation between gold and the dollar. By having a dedicated news feed, I can quickly identify the fundamental catalyst (such as a central bank policy change) causing such a divergence.</p>
+<p>Shipping updates for a Flutter application can often become a repetitive chore—manually building the APK, renaming files, and uploading them to a release page. To eliminate this friction, I have developed a production-ready GitHub Actions workflow that transforms the deployment process into a fully automated pipeline.</p>
 
-<h3 id="3-portfolio-hedging">3. Portfolio Hedging</h3>
-<p>For investors holding significant positions in equities, monitoring the gold-to-dollar ratio is essential for timing hedges. This software ensures that the news driving these movements is never missed.</p>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Tracking the Pulse of Gold and the Dollar: A Specialized News Aggregator In the volatile world of f...]]></summary></entry><entry><title type="html">flutter_cicd_build_release</title><link href="http://localhost:4000/projects/2026/09/09/flutter_cicd_build_release/" rel="alternate" type="text/html" title="flutter_cicd_build_release" /><published>2026-09-09T04:27:55+06:00</published><updated>2026-09-09T04:27:55+06:00</updated><id>http://localhost:4000/projects/2026/09/09/flutter_cicd_build_release</id><content type="html" xml:base="http://localhost:4000/projects/2026/09/09/flutter_cicd_build_release/"><![CDATA[<h1 id="streamlining-flutter-deployments-with-an-automated-cicd-pipeline">Streamlining Flutter Deployments with an Automated CI/CD Pipeline</h1>
-
-<p>In the fast-paced cycle of mobile app development, manual build processes are a bottleneck. Manually compiling APKs, renaming files, and uploading them to a release page is not only tedious but prone to human error. To solve this, I have developed a production-ready <strong>GitHub Actions workflow</strong> designed specifically for Flutter applications to automate the entire release pipeline.</p>
+<p>My goal was to create a system where I can focus entirely on writing code, knowing that every push to the <code class="language-plaintext highlighter-rouge">main</code> branch will automatically result in a compiled, optimized release available for download.</p>
 
 <h2 id="what-is-this-project">What is this Project?</h2>
 
-<p>My Flutter Automated CI/CD Release Pipeline is a specialized automation suite that transforms a code push into a downloadable production artifact. By leveraging GitHub Actions, I have created a system that listens for changes in the <code class="language-plaintext highlighter-rouge">main</code> branch, handles the complex environment setup required for Android builds, and publishes a tagged release automatically.</p>
-
-<p>The goal is simple: remove the “build and upload” phase from the developer’s to-do list, ensuring that the latest stable version of the app is always available for stakeholders and testers.</p>
+<p>This project is a specialized CI/CD (Continuous Integration/Continuous Deployment) pipeline designed specifically for Flutter applications. It leverages GitHub Actions to orchestrate the entire build-to-release lifecycle. Instead of relying on local machine environments—which can vary and lead to “it works on my machine” bugs—this pipeline uses a standardized Ubuntu environment to ensure consistent, reproducible builds.</p>
 
 <h2 id="key-features">Key Features</h2>
 
-<p>I have engineered this pipeline to be robust and lightweight, focusing on the essential steps required for a successful Android release:</p>
+<p>I have integrated several critical steps into the workflow to ensure the APK is built using the correct tooling and published without manual intervention:</p>
 
 <ul>
-  <li><strong>Automated Triggers:</strong> The pipeline is event-driven. Whenever I push code to the <code class="language-plaintext highlighter-rouge">main</code> branch, the workflow triggers immediately.</li>
+  <li><strong>Automated Triggers:</strong> The pipeline is event-driven, listening specifically for <code class="language-plaintext highlighter-rouge">push</code> events on the <code class="language-plaintext highlighter-rouge">main</code> branch.</li>
   <li><strong>Optimized Environment Setup:</strong>
     <ul>
-      <li><strong>Java 17:</strong> I utilize the Azul Zulu distribution of Java 17, which is critical for compatibility with modern Android Gradle build tools.</li>
-      <li><strong>Flutter Stable:</strong> The pipeline uses the <code class="language-plaintext highlighter-rouge">subosito/flutter-action</code> to ensure the latest stable Flutter SDK is always used.</li>
+      <li><strong>Java 17:</strong> I’ve configured the Azul Zulu distribution of Java 17, which is essential for the Android Gradle build tools to function correctly.</li>
+      <li><strong>Stable Flutter SDK:</strong> The system uses the <code class="language-plaintext highlighter-rouge">subosito/flutter-action</code> to pull the latest stable Flutter SDK, ensuring the app is built with the most reliable framework version.</li>
     </ul>
   </li>
-  <li><strong>Dependency Management:</strong> It automatically handles <code class="language-plaintext highlighter-rouge">flutter pub get</code>, ensuring all packages defined in <code class="language-plaintext highlighter-rouge">pubspec.yaml</code> are resolved before the build starts.</li>
-  <li><strong>Production-Ready Compilation:</strong> The system runs <code class="language-plaintext highlighter-rouge">flutter build apk --release</code>, generating a standalone, optimized APK optimized for end-users.</li>
-  <li><strong>Seamless Publishing:</strong> I integrated the <code class="language-plaintext highlighter-rouge">softprops/action-gh-release</code> to automatically create a GitHub Release. Each release is sequentially tagged (e.g., <code class="language-plaintext highlighter-rouge">v1</code>, <code class="language-plaintext highlighter-rouge">v2</code>) based on the build run number, with the <code class="language-plaintext highlighter-rouge">app-release.apk</code> attached as a binary asset.</li>
+  <li><strong>Dependency Management:</strong> The workflow automatically executes <code class="language-plaintext highlighter-rouge">flutter pub get</code>, resolving all package dependencies defined in the <code class="language-plaintext highlighter-rouge">pubspec.yaml</code> before the build begins.</li>
+  <li><strong>Production-Ready Builds:</strong> It compiles a standalone, optimized release APK (<code class="language-plaintext highlighter-rouge">app-release.apk</code>), stripping away debug symbols to ensure maximum performance and minimal file size.</li>
+  <li><strong>Hands-Free Publishing:</strong> Once the build succeeds, the pipeline automatically creates a GitHub Release. It uses the build run number to create sequential tags (e.g., <code class="language-plaintext highlighter-rouge">v1</code>, <code class="language-plaintext highlighter-rouge">v2</code>), attaches the generated APK, and publishes it instantly.</li>
 </ul>
 
 <h2 id="workflow-architecture">Workflow Architecture</h2>
 
-<p>The logic follows a linear, fail-safe path on an <code class="language-plaintext highlighter-rouge">ubuntu-latest</code> runner:</p>
+<p>The logic is structured as a linear sequence of jobs. Here is the architectural breakdown of how I’ve structured the process:</p>
 
 <ol>
-  <li><strong>Checkout:</strong> Pulls the latest source code.</li>
-  <li><strong>Java Setup:</strong> Configures the JDK.</li>
-  <li><strong>Flutter Setup:</strong> Initializes the Flutter environment.</li>
-  <li><strong>Dependency Resolution:</strong> Fetches necessary Dart packages.</li>
-  <li><strong>Build:</strong> Compiles the release APK.</li>
-  <li><strong>Release:</strong> Tags the build and uploads the artifact to the GitHub Releases page.</li>
+  <li><strong>Checkout:</strong> The runner clones the repository code.</li>
+  <li><strong>Tooling Setup:</strong> Java 17 and the Flutter SDK are installed.</li>
+  <li><strong>Dependency Resolution:</strong> All required Flutter packages are fetched.</li>
+  <li><strong>Compilation:</strong> The production APK is generated via <code class="language-plaintext highlighter-rouge">flutter build apk --release</code>.</li>
+  <li><strong>Release:</strong> The APK is uploaded to a new GitHub Release tag.</li>
 </ol>
 
 <h2 id="potential-use-cases">Potential Use Cases</h2>
 
-<p>This pipeline is particularly valuable in several development scenarios:</p>
+<p>This pipeline is ideal for various development scenarios:</p>
 
 <ul>
-  <li><strong>Continuous Beta Testing:</strong> If I am sharing builds with a QA team or beta testers, they can simply go to the “Releases” tab of the repository to download the latest APK without me having to send files manually.</li>
-  <li><strong>Rapid Prototyping:</strong> For projects requiring frequent iterations, this allows me to move from “code complete” to “installed on device” in minutes.</li>
-  <li><strong>Small Team Collaboration:</strong> It creates a “Single Source of Truth” for the latest build, ensuring every team member is testing the exact same version of the application.</li>
-  <li><strong>Open Source Projects:</strong> For community-driven Flutter apps, it allows contributors to see the tangible output of merged PRs immediately.</li>
-</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Streamlining Flutter Deployments with an Automated CI/CD Pipeline In the fast-paced cycle of mobile...]]></summary></entry><entry><title type="html">First Post</title><link href="http://localhost:4000/blogging/jekyll/2026/09/08/my-first-post/" rel="alternate" type="text/html" title="First Post" /><published>2026-09-08T22:00:00+06:00</published><updated>2026-09-08T22:00:00+06:00</updated><id>http://localhost:4000/blogging/jekyll/2026/09/08/my-first-post</id><content type="html" xml:base="http://localhost:4000/blogging/jekyll/2026/09/08/my-first-post/"><![CDATA[<p>The post content will show here
-My post content goes here using standard Markdown.
-I can write paragraphs, add <strong>bold text</strong>, create lists, or insert images.</p>
+  <li><strong>Rapid Prototyping:</strong> When I need to share the latest version of an app with stakeholders or testers quickly without manually sending files.</li>
+  <li><strong>Small to Medium Teams:</strong> For teams that want a “Single Source of Truth” for their releases, where the <code class="language-plaintext highlighter-rouge">main</code> branch always represents the latest deployable version.</li>
+  <li><strong>Open Source Projects:</strong> For projects where contributors can see a history of stable builds and download them directly from the GitHub Releases page.</li>
+  <li><strong>Continuous Delivery:</strong> For developers who want to move toward a CD model where every merged feature is immediately available as a testable artifact.</li>
+</ul>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Streamlining Flutter Deployments with an Automated CI/CD Release Pipeline Shipping updates for a Fl...]]></summary></entry><entry><title type="html">json-format-validator</title><link href="http://localhost:4000/projects/2026/08/29/json-format-validator/" rel="alternate" type="text/html" title="json-format-validator" /><published>2026-08-29T07:07:45+06:00</published><updated>2026-08-29T07:07:45+06:00</updated><id>http://localhost:4000/projects/2026/08/29/json-format-validator</id><content type="html" xml:base="http://localhost:4000/projects/2026/08/29/json-format-validator/"><![CDATA[<h1 id="securing-your-json-pipelines-with-json-format-validator">Securing Your JSON Pipelines with json-format-validator</h1>
 
-<p>It supports code snippets highlighting</p>
+<p>Handling JSON data is a fundamental part of modern web development, but it comes with hidden risks. From crashing servers due to unhandled <code class="language-plaintext highlighter-rouge">SyntaxError</code> exceptions to critical security vulnerabilities like Prototype Pollution and memory exhaustion, the simple act of parsing a string can introduce significant instability.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[]</span>
-
-    <span class="n">sequence</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="n">next_number</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">sequence</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">sequence</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">next_number</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">sequence</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
-
-<span class="c1"># Example usage:
-</span><span class="nf">print</span><span class="p">(</span><span class="nf">fibonacci</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-</code></pre></div></div>
-
-<h3 id="subheading">Subheading</h3>
-
-<p>It will automatically style your headings, text, and code blocks.</p>]]></content><author><name></name></author><category term="blogging" /><category term="jekyll" /><summary type="html"><![CDATA[The post content will show here My post content goes here using standard Markdown. I can write paragraphs, add bold text, create lists, or insert images.]]></summary></entry><entry><title type="html">json-format-validator</title><link href="http://localhost:4000/projects/2026/08/29/json-format-validator/" rel="alternate" type="text/html" title="json-format-validator" /><published>2026-08-29T07:07:45+06:00</published><updated>2026-08-29T07:07:45+06:00</updated><id>http://localhost:4000/projects/2026/08/29/json-format-validator</id><content type="html" xml:base="http://localhost:4000/projects/2026/08/29/json-format-validator/"><![CDATA[<h1 id="ensuring-json-integrity-with-json-format-validator">Ensuring JSON Integrity with json-format-validator</h1>
-
-<p>Handling JSON strings in a production environment is often more precarious than it seems. Between the risk of server-crashing syntax errors and the security vulnerabilities associated with prototype pollution, simply calling <code class="language-plaintext highlighter-rouge">JSON.parse()</code> can leave an application exposed.</p>
-
-<p>To solve this, I developed <strong>json-format-validator</strong>, a lightweight and secure Node.js utility designed to validate, sanitize, and format JSON strings without the risk of throwing unhandled exceptions or crashing your server.</p>
+<p>To solve these challenges, I created <strong>json-format-validator</strong>, a lightweight and secure Node.js utility designed to validate, sanitize, and format JSON strings without risking your server’s uptime.</p>
 
 <p><img src="https://img.shields.io/npm/v/json-format-validator.svg" alt="npm version" />
 <img src="https://img.shields.io/npm/l/json-format-validator.svg" alt="license" /></p>
 
-<h2 id="the-purpose">The Purpose</h2>
+<h2 id="what-is-json-format-validator">What is json-format-validator?</h2>
 
-<p>The primary goal of this project is to provide a “fail-safe” wrapper for JSON processing. Instead of allowing a malformed string to trigger a runtime exception that halts execution, my utility returns a predictable status object. This allows developers to handle errors gracefully while ensuring that the data being processed is safe and formatted correctly.</p>
+<p>At its core, <code class="language-plaintext highlighter-rouge">json-format-validator</code> is a fail-safe wrapper around JSON parsing. Instead of allowing a malformed string to throw a runtime error that could crash your process, my utility catches these issues and returns a consistent status object. This allows developers to handle invalid data gracefully while ensuring that the resulting JSON is pretty-printed and secure.</p>
 
 <h2 id="key-features">Key Features</h2>
 
 <h3 id="️-security-first-parsing">🛡️ Security-First Parsing</h3>
-<p>Security is baked into the core of the utility. I have implemented specific safeguards to protect your application:</p>
+<p>Security is not an afterthought in this project. I have implemented two primary safeguards:</p>
 <ul>
-  <li><strong>Prototype Pollution Defense:</strong> The parser uses custom reviver logic to strip <code class="language-plaintext highlighter-rouge">__proto__</code> and <code class="language-plaintext highlighter-rouge">constructor</code> keys, neutralizing object prototype injection attempts.</li>
-  <li><strong>Payload Guard:</strong> To prevent memory exhaustion attacks (DoS), the utility enforces configurable string size limits (defaulting to 5 MB). It checks byte length before parsing to avoid blocking the Node.js event loop.</li>
+  <li><strong>Prototype Pollution Defense:</strong> The utility uses custom reviver logic during parsing to automatically strip <code class="language-plaintext highlighter-rouge">__proto__</code> and <code class="language-plaintext highlighter-rouge">constructor</code> keys. This prevents attackers from injecting properties into the base Object prototype.</li>
+  <li><strong>Payload Guard:</strong> To prevent memory exhaustion (DoS) attacks, I’ve included a configurable size limit. The utility checks the byte length of the input before parsing, ensuring that oversized payloads don’t block the Node.js event loop.</li>
 </ul>
 
-<h3 id="️-fail-safe-responses">⚙️ Fail-Safe Responses</h3>
-<p>Rather than using try-catch blocks throughout your entire codebase, you can rely on a consistent response format:
-<code class="language-plaintext highlighter-rouge">{ status: boolean, data: string }</code>
-If the input is invalid or exceeds size limits, <code class="language-plaintext highlighter-rouge">status</code> returns <code class="language-plaintext highlighter-rouge">false</code> and the <code class="language-plaintext highlighter-rouge">data</code> field returns the original raw input, ensuring no data is lost and the server remains stable.</p>
+<h3 id="-fail-safe-responses">📉 Fail-Safe Responses</h3>
+<p>Rather than using <code class="language-plaintext highlighter-rouge">try-catch</code> blocks throughout your entire codebase, you can use this utility to get a standardized response:</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span> 
+  <span class="nl">status</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">,</span> <span class="c1">// true if successful, false if invalid or too large</span>
+  <span class="nx">data</span><span class="p">:</span> <span class="nx">string</span>     <span class="c1">// formatted JSON on success, or raw input on failure</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h3 id="-flexible-formatting">🎨 Flexible Formatting</h3>
-<p>I’ve included customizable indentation options to fit different project style guides:</p>
+<p>I wanted to ensure this tool fit into any coding style. It supports:</p>
 <ul>
-  <li><strong>Custom Spacing:</strong> Support for 0–10 spaces.</li>
-  <li><strong>Tab Support:</strong> Use the <code class="language-plaintext highlighter-rouge">'-t'</code> flag for tab-based indentation.</li>
+  <li><strong>Custom Spacing:</strong> Configurable indentation from 0 to 10 spaces.</li>
+  <li><strong>Tab Support:</strong> Passing <code class="language-plaintext highlighter-rouge">'-t'</code> as an argument switches the formatting to tab characters.</li>
 </ul>
 
-<h3 id="-universal-integration">🚀 Universal Integration</h3>
-<p>Whether you are working with modern ES Modules (<code class="language-plaintext highlighter-rouge">import</code>) or traditional CommonJS (<code class="language-plaintext highlighter-rouge">require</code>), the utility works seamlessly across both environments.</p>
+<h3 id="-universal-compatibility">🚀 Universal Compatibility</h3>
+<p>Whether you are working on a legacy project or a modern one, I’ve ensured it works seamlessly with both <strong>CommonJS (<code class="language-plaintext highlighter-rouge">require</code>)</strong> and <strong>ES Modules (<code class="language-plaintext highlighter-rouge">import</code>)</strong>.</p>
 
 <h2 id="potential-use-cases">Potential Use Cases</h2>
 
-<h3 id="1-api-middleware">1. API Middleware</h3>
-<p>I highly recommend using this as middleware in Express.js applications. You can validate and sanitize incoming raw payloads before they ever reach your route handlers, returning a <code class="language-plaintext highlighter-rouge">400 Bad Request</code> instantly if the JSON is malformed.</p>
+<h3 id="1-expressjs-middleware">1. Express.js Middleware</h3>
+<p>One of the most powerful ways to use this utility is as a gatekeeper for your API. By implementing it as middleware, I can validate and sanitize raw payloads before they ever reach the route handler.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">validateJsonMiddleware</span><span class="p">(</span><span class="nx">options</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">{</span> <span class="nx">indent</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">limitMb</span> <span class="o">=</span> <span class="mi">5</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+  <span class="k">return </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">typeof</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span><span class="p">)</span> <span class="k">return</span> <span class="nf">next</span><span class="p">();</span>
+
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">indent</span><span class="p">,</span> <span class="nx">limitMb</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nf">json</span><span class="p">({</span> <span class="na">error</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Invalid JSON payload received</span><span class="dl">'</span> <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="nx">req</span><span class="p">.</span><span class="nx">formattedJson</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+    <span class="nf">next</span><span class="p">();</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h3 id="2-git-pre-commit-hooks">2. Git Pre-commit Hooks</h3>
-<p>To maintain a clean codebase, you can integrate this utility into a pre-commit hook. This ensures that no invalid <code class="language-plaintext highlighter-rouge">.json</code> configuration files are committed to your repository.</p>
+<p>To maintain a clean codebase, I use this utility to prevent invalid JSON files from being committed to version control. By integrating it into a pre-commit script, the commit will fail if any staged <code class="language-plaintext highlighter-rouge">.json</code> file contains syntax errors.</p>
 
-<h3 id="3-cli-data-prettifying">3. CLI Data Prettifying</h3>
-<p>For those who prefer the terminal, the utility can be run via <code class="language-plaintext highlighter-rouge">npx</code> to quickly prettify JSON files or pipe formatted data into new files.</p>
+<h3 id="3-cli-prettifying">3. CLI Prettifying</h3>
+<p>For those who prefer the terminal, the utility includes a Command-Line Interface. You can quickly prettify a configuration file or pipe the output to a new file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx json-format data.json <span class="nt">-t</span> <span class="o">&gt;</span> pretty-data.json
+</code></pre></div></div>
 
-<h2 id="getting-started">Getting Started</h2>
+<h2 id="quick-start">Quick Start</h2>
 
 <p>Installation is straightforward via npm:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>json-format-validator
 </code></pre></div></div>
 
-<h3 id="basic-usage">Basic Usage</h3>
+<p>Here is a basic example of how I use it in a project:</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">processAndFormatJson</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">json-format-validator</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="kd">const</span> <span class="nx">rawJson</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">{"name":"Alice","role":"admin"}</span><span class="dl">'</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">rawJson</span><span class="p">);</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-<span class="c1">// Output: { status: true, data: '{\n "name": "Alice",\n "role": "admin"\n}' }</span>
+<span class="k">if </span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Formatted JSON:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
-<h3 id="advanced-configuration">Advanced Configuration</h3>
-
-<p>I have designed the <code class="language-plaintext highlighter-rouge">processAndFormatJson</code> function to be highly configurable:</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// processAndFormatJson(jsonString, indent, limitMb)</span>
-
-<span class="c1">// Example: 4-space indentation and a 10MB size limit</span>
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">largeJsonString</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-
-<span class="c1">// Example: Tab indentation</span>
-<span class="kd">const</span> <span class="nx">resultTabs</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="dl">'</span><span class="s1">-t</span><span class="dl">'</span><span class="p">);</span>
-</code></pre></div></div>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Ensuring JSON Integrity with json-format-validator Handling JSON strings in a production environmen...]]></summary></entry><entry><title type="html">cosmosDoor_laravel_blade</title><link href="http://localhost:4000/projects/2026/08/12/cosmosdoor_laravel_blade/" rel="alternate" type="text/html" title="cosmosDoor_laravel_blade" /><published>2026-08-12T10:40:39+06:00</published><updated>2026-08-12T10:40:39+06:00</updated><id>http://localhost:4000/projects/2026/08/12/cosmosdoor_laravel_blade</id><content type="html" xml:base="http://localhost:4000/projects/2026/08/12/cosmosdoor_laravel_blade/"><![CDATA[<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo" /></a></p>
+<p>By combining security, stability, and formatting in one small package, <code class="language-plaintext highlighter-rouge">json-format-validator</code> removes the boilerplate and risk associated with handling external JSON data.</p>]]></content><author><name></name></author><category term="projects" /><summary type="html"><![CDATA[Securing Your JSON Pipelines with json-format-validator Handling JSON data is a fundamental part of...]]></summary></entry><entry><title type="html">cosmosDoor_laravel_blade</title><link href="http://localhost:4000/projects/2026/08/12/cosmosdoor_laravel_blade/" rel="alternate" type="text/html" title="cosmosDoor_laravel_blade" /><published>2026-08-12T10:40:39+06:00</published><updated>2026-08-12T10:40:39+06:00</updated><id>http://localhost:4000/projects/2026/08/12/cosmosdoor_laravel_blade</id><content type="html" xml:base="http://localhost:4000/projects/2026/08/12/cosmosdoor_laravel_blade/"><![CDATA[<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo" /></a></p>
 
 <h1 id="building-elegant-web-applications-with-laravel">Building Elegant Web Applications with Laravel</h1>
 

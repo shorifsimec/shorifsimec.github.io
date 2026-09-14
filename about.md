@@ -17,7 +17,7 @@ order: 2
 #### 🎯 Software Developer • Open-Source Enthusiast • Builder
 
 <p align="left">
-  <a href="https://nishad.top">
+  <a href="https://shorifsimec.github.io">
     <img src="https://img.shields.io/badge/Website-Visit%20Portfolio-181717?style=for-the-badge&logo=github&logoColor=white" alt="Portfolio Website" />
   </a>
   <a href="https://github.com/nishadnyc">
@@ -59,7 +59,7 @@ The workflow automatically:
 
 **Tech:** Flutter · Dart · GitHub Actions · Java · Android
 
-[View Repository →](https://github.com/nishadnyc/flutter_cicd_build_release)
+[View Repository →](https://github.com/shorifsimec)
 
 ---
 

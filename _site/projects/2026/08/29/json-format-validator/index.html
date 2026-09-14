@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>json-format-validator | Shipon’s Portfolio</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="json-format-validator" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Ensuring JSON Integrity with json-format-validator Handling JSON strings in a production environmen…" />
+<meta name="twitter:description" property="og:description" content="Ensuring JSON Integrity with json-format-validator Handling JSON strings in a production environmen…" />
+<link rel="canonical" href="http://localhost:4000/projects/2026/08/29/json-format-validator/" />
+<meta property="og:url" content="http://localhost:4000/projects/2026/08/29/json-format-validator/" />
+<meta property="og:site_name" content="Shipon’s Portfolio" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-08-29T07:07:45+06:00" />
+<meta property="article:modified_time" content="2026-08-29T07:07:45+06:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="json-format-validator" />
+<meta property="fb:app_id" content="1988062861858816" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-29T07:07:45+06:00","datePublished":"2026-08-29T07:07:45+06:00","description":"Ensuring JSON Integrity with json-format-validator Handling JSON strings in a production environmen…","headline":"json-format-validator","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/projects/2026/08/29/json-format-validator/"},"url":"http://localhost:4000/projects/2026/08/29/json-format-validator/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Shipon&apos;s Portfolio" /></head>
+<body><header
+  class="site-header"
+  role="banner"
+  style="border-bottom: 1px solid #005500; padding: 20px 0"
+>
+  <div
+    class="wrapper"
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 30px;
+    "
+  >
+    <!-- Left Side: Terminal Branding / Clickable Site Title -->
+    <div>
+      <a class="site-title" rel="author" href="/">
+        Shipon&#39;s Portfolio
+      </a>
+    </div>
+
+    <nav class="custom-terminal-nav"><div class="nav-items" style="display: flex; gap: 20px; margin-bottom: 20px"><a
+    class="nav-item"
+    href="/about/"
+    style="text-decoration: none; font-weight: bold"
+  >
+    About Me
+  </a></div>
+</nav>
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">json-format-validator</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-08-29T07:07:45+06:00" itemprop="datePublished">Aug 29, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="ensuring-json-integrity-with-json-format-validator">Ensuring JSON Integrity with json-format-validator</h1>
+
+<p>Handling JSON strings in a production environment is often more precarious than it seems. Between the risk of server-crashing syntax errors and the security vulnerabilities associated with prototype pollution, simply calling <code class="language-plaintext highlighter-rouge">JSON.parse()</code> can leave an application exposed.</p>
+
+<p>To solve this, I developed <strong>json-format-validator</strong>, a lightweight and secure Node.js utility designed to validate, sanitize, and format JSON strings without the risk of throwing unhandled exceptions or crashing your server.</p>
+
+<p><img src="https://img.shields.io/npm/v/json-format-validator.svg" alt="npm version" />
+<img src="https://img.shields.io/npm/l/json-format-validator.svg" alt="license" /></p>
+
+<h2 id="the-purpose">The Purpose</h2>
+
+<p>The primary goal of this project is to provide a “fail-safe” wrapper for JSON processing. Instead of allowing a malformed string to trigger a runtime exception that halts execution, my utility returns a predictable status object. This allows developers to handle errors gracefully while ensuring that the data being processed is safe and formatted correctly.</p>
+
+<h2 id="key-features">Key Features</h2>
+
+<h3 id="️-security-first-parsing">🛡️ Security-First Parsing</h3>
+<p>Security is baked into the core of the utility. I have implemented specific safeguards to protect your application:</p>
+<ul>
+  <li><strong>Prototype Pollution Defense:</strong> The parser uses custom reviver logic to strip <code class="language-plaintext highlighter-rouge">__proto__</code> and <code class="language-plaintext highlighter-rouge">constructor</code> keys, neutralizing object prototype injection attempts.</li>
+  <li><strong>Payload Guard:</strong> To prevent memory exhaustion attacks (DoS), the utility enforces configurable string size limits (defaulting to 5 MB). It checks byte length before parsing to avoid blocking the Node.js event loop.</li>
+</ul>
+
+<h3 id="️-fail-safe-responses">⚙️ Fail-Safe Responses</h3>
+<p>Rather than using try-catch blocks throughout your entire codebase, you can rely on a consistent response format:
+<code class="language-plaintext highlighter-rouge">{ status: boolean, data: string }</code>
+If the input is invalid or exceeds size limits, <code class="language-plaintext highlighter-rouge">status</code> returns <code class="language-plaintext highlighter-rouge">false</code> and the <code class="language-plaintext highlighter-rouge">data</code> field returns the original raw input, ensuring no data is lost and the server remains stable.</p>
+
+<h3 id="-flexible-formatting">🎨 Flexible Formatting</h3>
+<p>I’ve included customizable indentation options to fit different project style guides:</p>
+<ul>
+  <li><strong>Custom Spacing:</strong> Support for 0–10 spaces.</li>
+  <li><strong>Tab Support:</strong> Use the <code class="language-plaintext highlighter-rouge">'-t'</code> flag for tab-based indentation.</li>
+</ul>
+
+<h3 id="-universal-integration">🚀 Universal Integration</h3>
+<p>Whether you are working with modern ES Modules (<code class="language-plaintext highlighter-rouge">import</code>) or traditional CommonJS (<code class="language-plaintext highlighter-rouge">require</code>), the utility works seamlessly across both environments.</p>
+
+<h2 id="potential-use-cases">Potential Use Cases</h2>
+
+<h3 id="1-api-middleware">1. API Middleware</h3>
+<p>I highly recommend using this as middleware in Express.js applications. You can validate and sanitize incoming raw payloads before they ever reach your route handlers, returning a <code class="language-plaintext highlighter-rouge">400 Bad Request</code> instantly if the JSON is malformed.</p>
+
+<h3 id="2-git-pre-commit-hooks">2. Git Pre-commit Hooks</h3>
+<p>To maintain a clean codebase, you can integrate this utility into a pre-commit hook. This ensures that no invalid <code class="language-plaintext highlighter-rouge">.json</code> configuration files are committed to your repository.</p>
+
+<h3 id="3-cli-data-prettifying">3. CLI Data Prettifying</h3>
+<p>For those who prefer the terminal, the utility can be run via <code class="language-plaintext highlighter-rouge">npx</code> to quickly prettify JSON files or pipe formatted data into new files.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Installation is straightforward via npm:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>json-format-validator
+</code></pre></div></div>
+
+<h3 id="basic-usage">Basic Usage</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">processAndFormatJson</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">json-format-validator</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">rawJson</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">{"name":"Alice","role":"admin"}</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">rawJson</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="c1">// Output: { status: true, data: '{\n "name": "Alice",\n "role": "admin"\n}' }</span>
+</code></pre></div></div>
+
+<h3 id="advanced-configuration">Advanced Configuration</h3>
+
+<p>I have designed the <code class="language-plaintext highlighter-rouge">processAndFormatJson</code> function to be highly configurable:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// processAndFormatJson(jsonString, indent, limitMb)</span>
+
+<span class="c1">// Example: 4-space indentation and a 10MB size limit</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">largeJsonString</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+<span class="c1">// Example: Tab indentation</span>
+<span class="kd">const</span> <span class="nx">resultTabs</span> <span class="o">=</span> <span class="nf">processAndFormatJson</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="dl">'</span><span class="s1">-t</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/projects/2026/08/29/json-format-validator/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer">
+  <div
+    class="wrapper"
+    style="display: flex; justify-content: space-between; align-items: center"
+  >
+    <div>
+      <p>
+        © 2026
+        <a
+          href="https://github.com/nishadnyc"
+          style="color: inherit; text-decoration: underline"
+        >
+          @shorifsimec </a
+        >. All rights reserved.
+      </p>
+    </div>
+    <div>
+      <a href="#top" id="back-to-top">↑ Back to Top</a>
+    </div>
+
+    <!-- Social Links -->
+    <div class="social-links"><ul class="social-media-list">
+  <li>
+    <a
+      href="http://localhost:4000/feed.xml"
+      target="_blank"
+      title="Subscribe to syndication feed"
+    >
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path
+          d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+              11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+              13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+              16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document
+      .querySelectorAll("pre.highlight, .highlighter-rouge pre")
+      .forEach(function (codeBlock) {
+        // 1. Structure the parent container for absolute alignment
+        const container = codeBlock.parentNode;
+        container.style.position = "relative";
+        container.style.paddingTop = "30px"; // Make clean room for our new top control bar
+
+        // 2. Extract the programming language from Jekyll's auto-generated CSS classes
+        let languageName = "CODE";
+        const parentClasses = container.className.split(" ");
+        const codeClasses = codeBlock.querySelector("code")
+          ? codeBlock.querySelector("code").className.split(" ")
+          : [];
+        const allRepresents = parentClasses.concat(codeClasses);
+
+        for (let c of allRepresents) {
+          if (c.startsWith("language-")) {
+            languageName = c.replace("language-", "").toUpperCase();
+            break;
+          }
+        }
+
+        // 3. Generate the Language Badge element
+        const badge = document.createElement("span");
+        badge.className = "code-lang-badge";
+        badge.innerText = languageName;
+        badge.style.position = "absolute";
+        badge.style.top = "5px";
+        badge.style.left = "10px";
+        badge.style.color = "#008800"; // Darker green matrix shade for metadata
+        badge.style.fontFamily = "'Courier New', monospace";
+        badge.style.fontSize = "11px";
+        badge.style.fontWeight = "bold";
+        badge.style.letterSpacing = "1px";
+        badge.style.zIndex = "10";
+
+        // 4. Generate the Copy Button element
+        const button = document.createElement("button");
+        button.className = "copy-code-btn";
+        button.type = "button";
+        button.innerText = "Copy";
+        button.style.position = "absolute";
+        button.style.top = "5px";
+        button.style.right = "10px";
+        button.style.backgroundColor = "transparent";
+        button.style.border = "1px solid #005500";
+        button.style.color = "#00ff00";
+        button.style.fontFamily = "'Courier New', monospace";
+        button.style.cursor = "pointer";
+        button.style.padding = "2px 8px";
+        button.style.fontSize = "11px";
+        button.style.zIndex = "10";
+        button.style.transition = "all 0.2s ease";
+
+        // Hover design mechanics for the copy toggle button
+        button.addEventListener("mouseenter", function () {
+          button.style.borderColor = "#00ff00";
+          button.style.boxShadow = "0 0 5px rgba(0,255,0,0.3)";
+        });
+        button.addEventListener("mouseleave", function () {
+          button.style.borderColor = "#005500";
+          button.style.boxShadow = "none";
+        });
+
+        // Handle clipboard logging action
+        button.addEventListener("click", function () {
+          const codeText = codeBlock.querySelector("code")
+            ? codeBlock.querySelector("code").innerText
+            : codeBlock.innerText;
+          navigator.clipboard.writeText(codeText).then(function () {
+            button.innerText = "Copied!";
+            button.style.backgroundColor = "#00ff00";
+            button.style.color = "#050505";
+            setTimeout(function () {
+              button.innerText = "Copy";
+              button.style.backgroundColor = "transparent";
+              button.style.color = "#00ff00";
+            }, 2000);
+          });
+        });
+
+        // 5. Append both elements cleanly into the wrapper container
+        container.appendChild(badge);
+        container.appendChild(button);
+      });
+  });
+</script>
+ <canvas
+  id="matrixCanvas"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 1;
+  "
+></canvas>
+
+<script>
+  const canvas = document.getElementById("matrixCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  const katakana =
+    "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const alphabet = katakana.split("");
+
+  const fontSize = 16;
+  let columns = Math.floor(canvas.width / fontSize);
+  let rainDrops = Array(columns).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(5, 5, 5, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff00";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < rainDrops.length; i++) {
+      const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+      ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+      if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        rainDrops[i] = 0;
+      }
+      rainDrops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 30);
+</script>
+
+
+<style>
+  /* ── Base ── */
+  *,
+  *::before,
+  *::after {
+    font-family: "Courier New", Courier, monospace !important;
+    box-sizing: border-box;
+  }
+  body {
+    color: #00cc00 !important;
+  }
+
+  /* ── Links ── */
+  a,
+  a:link,
+  a:visited,
+  a:active {
+    color: #00ff00 !important;
+    text-decoration: none !important;
+  }
+  a:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  }
+
+  /* ── Heading hierarchy ── */
+  h1,
+  .post-title {
+    color: #00ff00 !important;
+    text-shadow:
+      0 0 12px rgba(0, 255, 0, 1),
+      0 0 24px rgba(0, 255, 0, 0.4) !important;
+  }
+  h2 {
+    color: #00ee00 !important;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.8) !important;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 4px;
+  }
+  h3 {
+    color: #00cc00 !important;
+    text-shadow: 0 0 6px rgba(0, 255, 0, 0.5) !important;
+  }
+  h4,
+  h5,
+  h6 {
+    color: #00aa00 !important;
+    text-shadow: none !important;
+  }
+  .site-title {
+    color: #00ff00 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.9) !important;
+  }
+  .post-link {
+    color: #00ff00 !important;
+    text-shadow: 0 0 6px rgba(0, 255, 0, 0.6) !important;
+  }
+
+  /* ── Body text ── */
+  p,
+  li,
+  td,
+  th,
+  blockquote {
+    color: #00bb00 !important;
+    line-height: 1.8 !important;
+  }
+  strong,
+  b {
+    color: #00ff00 !important;
+  }
+  .post-meta {
+    color: #007700 !important;
+  }
+
+  /* ── Inline code — no borders ── */
+  code,
+  p code,
+  li code,
+  td code,
+  h1 code,
+  h2 code,
+  h3 code,
+  .post-content code,
+  .page-content code {
+    background-color: rgba(0, 60, 0, 0.25) !important;
+    border: none !important;
+    border-width: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #00ff00 !important;
+    padding: 2px 6px !important;
+    border-radius: 3px !important;
+    font-size: 0.9em !important;
+  }
+
+  /* ── Code block container ── */
+  .highlighter-rouge,
+  div.highlighter-rouge,
+  figure.highlight {
+    background-color: #0a1a0a !important;
+    border: 1px solid #005500 !important;
+    border-radius: 4px !important;
+    position: relative !important;
+    padding-top: 30px !important;
+    margin: 16px 0 !important;
+  }
+
+  /* Kill white background from Minima/rouge */
+  .highlight,
+  .highlight pre,
+  .highlighter-rouge pre,
+  .highlighter-rouge pre.highlight {
+    background-color: #0a1a0a !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 12px 16px !important;
+    color: #00ff00 !important;
+  }
+
+  /* ── Syntax token colors — all green shades ── */
+  /* Kill borders/backgrounds on every span rouge generates */
+  .highlight span,
+  .highlight span * {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Fix copy button */
+  .copy-code-btn {
+    background-color: #0a1a0a !important;
+    border: 1px solid #005500 !important;
+    color: #00ff00 !important;
+  }
+  .copy-code-btn:hover {
+    border-color: #00ff00 !important;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.3) !important;
+  }
+  .highlight .c,
+  .highlight .c1,
+  .highlight .cm {
+    color: #006600 !important;
+  } /* comments - dim */
+  .highlight .k,
+  .highlight .kd,
+  .highlight .kn,
+  .highlight .kp,
+  .highlight .kr,
+  .highlight .kt {
+    color: #00ff00 !important;
+    font-weight: bold !important;
+  } /* keywords - bright */
+  .highlight .s,
+  .highlight .s1,
+  .highlight .s2,
+  .highlight .se,
+  .highlight .si,
+  .highlight .sb {
+    color: #00cc00 !important;
+  } /* strings */
+  .highlight .mi,
+  .highlight .mf,
+  .highlight .m {
+    color: #00ee00 !important;
+  } /* numbers */
+  .highlight .n,
+  .highlight .na,
+  .highlight .nb,
+  .highlight .nc,
+  .highlight .nf,
+  .highlight .nn,
+  .highlight .nv,
+  .highlight .nx {
+    color: #00bb00 !important;
+  } /* names */
+  .highlight .o,
+  .highlight .ow,
+  .highlight .p {
+    color: #00ff00 !important;
+  } /* operators */
+  .highlight .err {
+    color: #ff3333 !important;
+    background: transparent !important;
+  }
+
+  /* ── Blockquotes ── */
+  blockquote {
+    border-left: 3px solid #00ff00 !important;
+    background-color: rgba(0, 255, 0, 0.05) !important;
+    padding: 8px 16px !important;
+    margin: 16px 0 !important;
+  }
+
+  /* ── Layouts ── */
+  .site-header,
+  .site-footer {
+    background-color: rgba(3, 3, 3, 0.92) !important;
+    position: relative;
+    z-index: 1;
+  }
+  .page-content,
+  .post-content {
+    background-color: rgba(3, 3, 3, 0.88) !important;
+    position: relative;
+    z-index: 1;
+  }
+  .wrapper {
+    max-width: 800px !important;
+    background-color: transparent !important;
+  }
+  .home,
+  .post-list {
+    background-color: transparent !important;
+  }
+
+  hr {
+    border-color: #003300 !important;
+  }
+
+  /* ── Tables ── */
+  table {
+    background-color: transparent !important;
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  table,
+  thead,
+  tbody,
+  tr {
+    background-color: transparent !important;
+  }
+  th {
+    background-color: rgba(0, 40, 0, 0.6) !important;
+    color: #00ff00 !important;
+    border: 1px solid #003300 !important;
+    padding: 8px 12px !important;
+  }
+  td {
+    background-color: rgba(0, 20, 0, 0.4) !important;
+    color: #00bb00 !important;
+    border: 1px solid #002200 !important;
+    padding: 8px 12px !important;
+  }
+  tr:nth-child(even) td {
+    background-color: rgba(0, 30, 0, 0.5) !important;
+  }
+  td code,
+  th code {
+    background-color: rgba(0, 60, 0, 0.4) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<script
+  defer
+  src="https://www.thunderbolt.com/gateway/api/v1/thunderbolt-ui/embed.js"
+></script>
+</body>
+
+</html>

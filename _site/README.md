@@ -1,0 +1,1 @@
+🔥 🤖 Repository for my personal blog/portfolio website, which auto-generates blog articles based on my GitHub repositories using an AI model by taking advantage of GitHub workflows cron job running once every day.

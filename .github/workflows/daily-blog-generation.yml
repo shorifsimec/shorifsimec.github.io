@@ -1,0 +1,24 @@
+name: Daily Generate Blog Content
+
+on:
+  workflow_dispatch: # Allows you to trigger this manually with a button click
+  schedule:
+    - cron: "0 22 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  analyze-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Automated Repo Article Generator
+        uses: nishadnyc/ai-jekyll-posts-generation-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          ollama-api-key: ${{ secrets.OLLAMA_API_KEY }}

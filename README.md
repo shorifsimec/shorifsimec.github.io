@@ -1,1 +1,3 @@
-🔥 🤖 Repository for my personal blog/portfolio website, which auto-generates blog articles based on my GitHub repositories using an AI model by taking advantage of GitHub workflows cron job running once every day.
+[![pages-build-deployment](https://github.com/nishadnyc/nishadnyc.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/nishadnyc/nishadnyc.github.io/actions/workflows/pages/pages-build-deployment) [![Daily Generate Blog Content](https://github.com/nishadnyc/nishadnyc.github.io/actions/workflows/daily-blog-generation.yml/badge.svg)](https://github.com/nishadnyc/nishadnyc.github.io/actions/workflows/daily-blog-generation.yml) 
+
+> 🔥 🤖 Repository for my personal blog/portfolio website, which auto-generates blog articles based on my GitHub repositories using an AI model by taking advantage of GitHub workflows cron job running once every day.

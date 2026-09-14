@@ -1,7 +1,7 @@
-title: "Nishad's Portfolio"
+title: "Shipon's Portfolio"
 description: "A blog about my personal thoughts, experiences, and projects."
 permalink: pretty
-url: "https://nishad.top"
+url: "https://shipon.top"
 image: "https://avatars.githubusercontent.com/u/186933450?v=4"
 theme: minima
 plugins:
@@ -11,7 +11,7 @@ plugins:
   - jekyll-sitemap
 remote_theme: jekyll/minima@v2.5.1
 future: true
-github_username: NishadNYC
+github_username: shorifsimec
 
 # Disable automatic titles from markdown headers
 titles_from_headings:

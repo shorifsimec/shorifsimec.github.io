@@ -182,11 +182,11 @@ Web Development         ███████████████░░░�
 <p align="center">
   <img
     src="https://github-readme-stats.vercel.app/api?username=nishadnyc&show_icons=true&theme=tokyonight&hide_border=true"
-    alt="Nishad's GitHub statistics"
+    alt="Shorif's GitHub statistics"
   />
   <img
     src="https://github-readme-stats.vercel.app/api/top-langs/?username=nishadnyc&layout=compact&theme=tokyonight&hide_border=true"
-    alt="Nishad's most used programming languages"
+    alt="Shorif's most used programming languages"
   />
 </p>
 

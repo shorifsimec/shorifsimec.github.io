@@ -12,7 +12,7 @@ order: 2
 
 ---
 
-# Hi, I'm Nishad 👋
+# Hi, I'm Shorif 👋
 
 #### 🎯 Software Developer • Open-Source Enthusiast • Builder
 
@@ -20,7 +20,7 @@ order: 2
   <a href="https://shorifsimec.github.io">
     <img src="https://img.shields.io/badge/Website-Visit%20Portfolio-181717?style=for-the-badge&logo=github&logoColor=white" alt="Portfolio Website" />
   </a>
-  <a href="https://github.com/nishadnyc">
+  <a href="https://github.com/shorifsimec">
     <img src="https://img.shields.io/badge/GitHub-Follow%20Me-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
   </a>
 </p>

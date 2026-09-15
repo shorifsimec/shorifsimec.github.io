@@ -6,7 +6,7 @@ order: 2
 
 <div align="center" markdown="1">
 
-![GitHub Streak](https://github-stats.nishad.top/api/card-with-avatar?username=nishadnyc&theme=%7B%22backgroundColor%22%3A%22%231a1b27%22%2C%22textColor%22%3A%22%23ffffff%22%2C%22accentColor%22%3A%22%2300d4aa%22%2C%22borderColor%22%3A%22%2330363d%22%2C%22waterColor%22%3A%22%2300d4aa%22%2C%22streakColor%22%3A%22%23ff6b6b%22%7D)
+![GitHub Streak](https://shorifsimec.github.io/api/card-with-avatar?username=shorifsimec&theme=%7B%22backgroundColor%22%3A%22%231a1b27%22%2C%22textColor%22%3A%22%23ffffff%22%2C%22accentColor%22%3A%22%2300d4aa%22%2C%22borderColor%22%3A%22%2330363d%22%2C%22waterColor%22%3A%22%2300d4aa%22%2C%22streakColor%22%3A%22%23ff6b6b%22%7D)
 
 </div>
 
@@ -86,7 +86,7 @@ npm install json-format-validator
 
 **Tech:** Node.js · JavaScript · npm · CLI Development
 
-[View Repository →](https://github.com/nishadnyc/json-format-validator)
+[View Repository →](https://github.com/shorifsimec/json-format-validator)
 
 ---
 
@@ -106,7 +106,7 @@ Features include:
 
 **Tech:** Node.js · JavaScript · Discord API · JSON
 
-[View Repository →](https://github.com/nishadnyc/ServerManagerBot)
+[View Repository →](https://github.com/shorifsimec/ServerManagerBot)
 
 ---
 
@@ -126,7 +126,7 @@ This project was developed while contributing to a UNICEF application and involv
 
 **Tech:** Flutter · Dart · Firebase Cloud Messaging · RapidPro
 
-[View Repository →](https://github.com/nishadnyc/rapid-pro)
+[View Repository →](https://github.com/shorifsimec/rapid-pro)
 
 ---
 
@@ -138,9 +138,9 @@ It provides a central place to learn more about my work, projects, technical int
 
 **Tech:** Jekyll · HTML · CSS · GitHub Pages
 
-[Visit Website →](https://nishadnyc.github.io)
+[Visit Website →](https://shorifsimec.github.io)
 
-[View Repository →](https://github.com/nishadnyc/nishadnyc.github.io)
+[View Repository →](https://github.com/shorifsimec/shorifsimec.github.io)
 
 ---
 
@@ -181,11 +181,11 @@ Web Development         ███████████████░░░�
 
 <p align="center">
   <img
-    src="https://github-readme-stats.vercel.app/api?username=nishadnyc&show_icons=true&theme=tokyonight&hide_border=true"
+    src="https://github-readme-stats.vercel.app/api?username=shorifsimec&show_icons=true&theme=tokyonight&hide_border=true"
     alt="Shorif's GitHub statistics"
   />
   <img
-    src="https://github-readme-stats.vercel.app/api/top-langs/?username=nishadnyc&layout=compact&theme=tokyonight&hide_border=true"
+    src="https://github-readme-stats.vercel.app/api/top-langs/?username=shorifsimec&layout=compact&theme=tokyonight&hide_border=true"
     alt="Shorif's most used programming languages"
   />
 </p>

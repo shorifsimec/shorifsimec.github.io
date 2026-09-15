@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Automated Repo Article Generator
-        uses: nishadnyc/ai-jekyll-posts-generation-action@v1
+        uses: shorifsimec/ai-jekyll-posts-generation-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ollama-api-key: ${{ secrets.OLLAMA_API_KEY }}

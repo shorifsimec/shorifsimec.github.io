@@ -48,7 +48,7 @@
       user-select: none;
     "
   >
-    <span>SESSION: GUEST@NISHADNYC_OS v1.0.2</span>
+    <span>SESSION: GUEST@SHORIF_OS v1.0.2</span>
     <span>STATUS: ONLINE</span>
   </div>
 
@@ -67,7 +67,7 @@
     style="display: flex; align-items: center; margin-top: 15px; color: #00ff00"
   >
     <span style="font-weight: bold; margin-right: 5px; white-space: nowrap"
-      >guest@nishadnyc:~$</span
+      >guest@shorif:~$</span
     >
 
     <div
@@ -147,7 +147,7 @@
         userEcho.style.margin = "10px 0 2px 0";
         userEcho.style.color = "#00aa00";
         userEcho.innerHTML =
-          '<span style="font-weight:bold;">guest@nishadnyc:~$</span> ' +
+          '<span style="font-weight:bold;">guest@shorif:~$</span> ' +
           rawCommand;
         log.appendChild(userEcho);
 
@@ -213,14 +213,14 @@
             <div style="color: #ffffff; margin-top: 5px;">
               Overriding security protocols...<br>
               Cracking workspace keychains...<br>
-              <span style="color: #00ff00; font-weight: bold;">[SUCCESS] root@nishadnyc:~# SHELL ELEVATED. Welcome, system owner.</span>
+              <span style="color: #00ff00; font-weight: bold;">[SUCCESS] root@shorif:~# SHELL ELEVATED. Welcome, system owner.</span>
             </div>
           `;
 
             setTimeout(() => {
               const promptSpan = document.querySelector(".input-line span");
               if (promptSpan) {
-                promptSpan.innerText = "root@nishadnyc:#";
+                promptSpan.innerText = "root@shorif:#";
                 promptSpan.style.color = "#ff3333";
               }
             }, 600);

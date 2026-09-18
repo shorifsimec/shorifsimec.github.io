@@ -1,24 +1,71 @@
 name: Daily Generate Blog Content
 
 on:
-  workflow_dispatch: # Allows you to trigger this manually with a button click
+  workflow_dispatch:
+
   schedule:
-    - cron: "0 22 * * *"
+    # Every day at 10:00 PM Bangladesh time (UTC+6)
+    - cron: "0 16 * * *"
+      timezone: "Asia/Dhaka"
 
 permissions:
   contents: write
 
 jobs:
-  analyze-repos:
+  generate-blog:
+    name: Generate Blog Posts
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout target repository
-        uses: actions/checkout@v4
+      # --------------------------------------------------
+      # 1. Checkout current repository
+      # --------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Automated Repo Article Generator
-        uses: shorifsimec/ai-jekyll-posts-generation-action@v1
+      # --------------------------------------------------
+      # 2. Setup Node.js
+      # --------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          ollama-api-key: ${{ secrets.OLLAMA_API_KEY }}
+          node-version: 22
+
+      # --------------------------------------------------
+      # 3. Check Node.js
+      # --------------------------------------------------
+      - name: Check environment
+        run: |
+          node --version
+          npm --version
+          echo "Repository: $GITHUB_REPOSITORY"
+
+      # --------------------------------------------------
+      # 4. Generate blog posts using your Node.js script
+      # --------------------------------------------------
+      - name: Generate blog posts
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+        run: |
+          node scripts/generate-posts.js
+
+      # --------------------------------------------------
+      # 5. Commit generated/updated posts
+      # --------------------------------------------------
+      - name: Commit generated posts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add _posts/
+
+          if git diff --cached --quiet; then
+            echo "No new or updated blog posts."
+          else
+            git commit -m "chore: generate project blog posts"
+            git push
+          fi

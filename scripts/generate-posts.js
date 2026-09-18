@@ -2,17 +2,41 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-let username;
+const githubRepository = process.env.GITHUB_REPOSITORY;
 const githubToken = process.env.GITHUB_TOKEN;
-username = process.env.GITHUB_REPOSITORY.split("/")[0];
 const ollamaKey = process.env.OLLAMA_API_KEY;
-const postsDir = "_posts";
-if (!fs.existsSync(postsDir)) fs.mkdirSync(postsDir);
 
+if (!githubRepository) {
+  throw new Error("GITHUB_REPOSITORY environment variable is missing.");
+}
+
+if (!githubToken) {
+  throw new Error("GITHUB_TOKEN environment variable is missing.");
+}
+
+if (!ollamaKey) {
+  throw new Error("OLLAMA_API_KEY environment variable is missing.");
+}
+
+const username = githubRepository.split("/")[0];
+
+const postsDir = "_posts";
+
+if (!fs.existsSync(postsDir)) {
+  fs.mkdirSync(postsDir, { recursive: true });
+}
+
+// --------------------------------------------------
 // Utility: Make HTTPS request
+// --------------------------------------------------
+
 function makeRequest(url, method = "GET", headers = {}, body = null) {
   return new Promise((resolve, reject) => {
-    const requestHeaders = { "User-Agent": "GitHub-Actions-Bot", ...headers };
+    const requestHeaders = {
+      "User-Agent": "GitHub-Actions-Bot",
+      ...headers,
+    };
+
     const urlObj = new URL(url);
 
     const options = {
@@ -24,87 +48,136 @@ function makeRequest(url, method = "GET", headers = {}, body = null) {
 
     const req = https.request(options, (res) => {
       let data = "";
-      res.on("data", (chunk) => (data += chunk));
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
       res.on("end", () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ status: res.statusCode, data });
+          resolve({
+            status: res.statusCode,
+            data,
+          });
         } else {
-          reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+          reject(
+            new Error(
+              `HTTP ${res.statusCode} ${res.statusMessage || ""}: ${data}`,
+            ),
+          );
         }
       });
     });
 
     req.on("error", reject);
-    if (body) req.write(JSON.stringify(body));
+
+    if (body) {
+      req.write(JSON.stringify(body));
+    }
+
     req.end();
   });
 }
 
-// Fetch authenticated GitHub username
+// --------------------------------------------------
+// Fetch public repositories
+// --------------------------------------------------
+
 async function getPublicRepos() {
   console.log(`Fetching public repos for ${username}...`);
+
   const repos = [];
   let page = 1;
 
   while (true) {
-    const url = `https://api.github.com/users/${username}/repos?type=public&page=${page}&per_page=100`;
+    const url =
+      `https://api.github.com/users/${username}/repos` +
+      `?type=public&page=${page}&per_page=100`;
+
     const res = await makeRequest(url, "GET", {
-      Authorization: `token ${githubToken}`,
-      Accept: "application/vnd.github.v3+json",
+      Authorization: `Bearer ${githubToken}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
     });
 
     const data = JSON.parse(res.data);
-    if (!Array.isArray(data) || data.length === 0) break;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      break;
+    }
 
     data.forEach((repo) => {
-      // Ignoring readme profile repo
-      if (
-        !repo.archived &&
-        repo.name.toLowerCase() !== username.toLowerCase()
-      ) {
-        repos.push({
-          name: repo.name,
-          default_branch: repo.default_branch,
-        });
+      // Ignore archived repositories
+      if (repo.archived) {
+        return;
       }
+
+      // Ignore the GitHub profile repository
+      if (repo.name.toLowerCase() === username.toLowerCase()) {
+        return;
+      }
+
+      repos.push({
+        name: repo.name,
+        default_branch: repo.default_branch,
+      });
     });
+
     page++;
   }
 
   return repos;
 }
 
+// --------------------------------------------------
 // Get last commit date on default branch
+// --------------------------------------------------
+
 async function getLastCommitDate(repo) {
-  const url = `https://api.github.com/repos/${username}/${repo.name}/commits?per_page=1`;
+  const url =
+    `https://api.github.com/repos/${username}/${repo.name}/commits` +
+    `?sha=${encodeURIComponent(repo.default_branch)}&per_page=1`;
+
   const res = await makeRequest(url, "GET", {
-    Authorization: `token ${githubToken}`,
-    Accept: "application/vnd.github.v3+json",
+    Authorization: `Bearer ${githubToken}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
   });
 
   const data = JSON.parse(res.data);
+
   if (Array.isArray(data) && data.length > 0) {
     return new Date(data[0].commit.committer.date);
   }
+
   return null;
 }
 
+// --------------------------------------------------
 // Get raw README content
+// --------------------------------------------------
+
 async function getReadme(repo) {
   const url = `https://api.github.com/repos/${username}/${repo.name}/readme`;
+
   try {
     const res = await makeRequest(url, "GET", {
-      Authorization: `token ${githubToken}`,
-      Accept: "application/vnd.github.v3.raw",
+      Authorization: `Bearer ${githubToken}`,
+      Accept: "application/vnd.github.raw+json",
+      "X-GitHub-Api-Version": "2022-11-28",
     });
+
     return res.data;
-  } catch {
+  } catch (error) {
     console.log(`  No README found for ${repo.name}`);
     return null;
   }
 }
 
-// Call Ollama Cloud API
+// --------------------------------------------------
+// Generate article using Ollama Cloud
+// --------------------------------------------------
+
 async function generateArticle(readme) {
   const prompt =
     "You are a technical writer. Write a comprehensive blog article about the software project described in the README below.\n\n" +
@@ -114,9 +187,9 @@ async function generateArticle(readme) {
     '- Do not say phrases like "Based on the README", "I have extrapolated", "As described", or similar.\n' +
     "- If information is limited, write what you can from what is given. Do not acknowledge gaps.\n" +
     "- Use markdown formatting with headers, bullet points where appropriate.\n" +
-    "- Use any markdown image or url that's available for your article. \n" +
-    "- Don't invent any image url out of blue, use only what's available in the project source code or readme.md" +
-    "- Write the articles in first person, since you are writing the articles on behalf of someone, use 'I', 'me' when referring" +
+    "- Use any markdown image or URL that's available for your article.\n" +
+    "- Don't invent any image URL out of blue. Use only what's available in the project source code or README.\n" +
+    "- Write the articles in first person, since you are writing the articles on behalf of someone, use 'I' and 'me' when referring to the author.\n" +
     "- Cover: what the project is, its purpose, key features, and potential use cases.\n\n" +
     "README:\n" +
     readme;
@@ -128,48 +201,89 @@ async function generateArticle(readme) {
       Authorization: `Bearer ${ollamaKey}`,
       "Content-Type": "application/json",
     },
-    { model: "gemma4:31b-cloud", prompt, stream: false },
+    {
+      model: "gemma4:31b-cloud",
+      prompt,
+      stream: false,
+    },
   );
 
   const data = JSON.parse(res.data);
+
   return data.response || "";
 }
 
-// Returns true if the post is missing or the commit date is newer than the post date
+// --------------------------------------------------
+// Check whether post needs update
+// --------------------------------------------------
+
 function shouldUpdatePost(repoName, lastCommitDate) {
   const files = fs.readdirSync(postsDir);
-  const escaped = repoName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pattern = new RegExp(`^(\\d{4}-\\d{2}-\\d{2})-${escaped}\\.md$`, "i");
 
-  const existing = files.find((f) => pattern.test(f));
-  if (!existing) return true;
+  const escaped = repoName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const pattern = new RegExp(
+    `^(\\d{4}-\\d{2}-\\d{2})-${escaped}\\.md$`,
+    "i",
+  );
+
+  const existing = files.find((file) => pattern.test(file));
+
+  if (!existing) {
+    return true;
+  }
 
   const match = existing.match(/^(\d{4}-\d{2}-\d{2})/);
-  if (!match) return true;
 
-  return lastCommitDate > new Date(match[1]);
+  if (!match) {
+    return true;
+  }
+
+  const postDate = new Date(`${match[1]}T00:00:00Z`);
+
+  return lastCommitDate > postDate;
 }
 
-// Remove old post file for this repo if the date changed
+// --------------------------------------------------
+// Remove old post for repository
+// --------------------------------------------------
+
 function removeOldPost(repoName) {
   const files = fs.readdirSync(postsDir);
+
   const escaped = repoName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pattern = new RegExp(`^\\d{4}-\\d{2}-\\d{2}-${escaped}\\.md$`, "i");
+
+  const pattern = new RegExp(
+    `^\\d{4}-\\d{2}-\\d{2}-${escaped}\\.md$`,
+    "i",
+  );
 
   files
-    .filter((f) => pattern.test(f))
-    .forEach((f) => {
-      fs.unlinkSync(path.join(postsDir, f));
-      console.log(`  Removed old post: ${f}`);
+    .filter((file) => pattern.test(file))
+    .forEach((file) => {
+      fs.unlinkSync(path.join(postsDir, file));
+
+      console.log(`  Removed old post: ${file}`);
     });
 }
 
+// --------------------------------------------------
+// Generate post filename
+// --------------------------------------------------
+
 function getPostFilename(repoName, commitDate) {
   const y = commitDate.getUTCFullYear();
+
   const m = String(commitDate.getUTCMonth() + 1).padStart(2, "0");
+
   const d = String(commitDate.getUTCDate()).padStart(2, "0");
+
   return `${y}-${m}-${d}-${repoName.toLowerCase()}.md`;
 }
+
+// --------------------------------------------------
+// Generate excerpt
+// --------------------------------------------------
 
 function getExcerpt(content, length = 100) {
   return (
@@ -181,10 +295,16 @@ function getExcerpt(content, length = 100) {
   );
 }
 
+// --------------------------------------------------
+// Create Jekyll post
+// --------------------------------------------------
+
 function createPost(repoName, commitDate, article) {
   const excerpt = getExcerpt(article).replace(/"/g, "'");
+
   const dateStr =
-    commitDate.toISOString().replace("T", " ").substring(0, 19) + " +0000";
+    commitDate.toISOString().replace("T", " ").substring(0, 19) +
+    " +0000";
 
   return [
     "---",
@@ -199,10 +319,21 @@ function createPost(repoName, commitDate, article) {
   ].join("\n");
 }
 
+// --------------------------------------------------
 // Main
+// --------------------------------------------------
+
 (async () => {
   try {
+    console.log("==============================================");
+    console.log(" AI Jekyll Blog Post Generator");
+    console.log("==============================================");
+    console.log(`GitHub repository: ${githubRepository}`);
+    console.log(`GitHub username:   ${username}`);
+    console.log("");
+
     const repos = await getPublicRepos();
+
     console.log(`Found ${repos.length} public repositories\n`);
 
     let created = 0;
@@ -214,50 +345,94 @@ function createPost(repoName, commitDate, article) {
 
       try {
         const lastCommitDate = await getLastCommitDate(repo);
+
         if (!lastCommitDate) {
           console.log("No commits found, skipping");
+
           skipped++;
+
           continue;
         }
 
+        console.log(
+          `\n  Latest commit: ${lastCommitDate.toISOString()}`,
+        );
+
         if (!shouldUpdatePost(repo.name, lastCommitDate)) {
-          console.log("Up to date, skipping");
+          console.log("  Up to date, skipping");
+
           skipped++;
+
           continue;
         }
 
         const readme = await getReadme(repo);
+
         if (!readme) {
           skipped++;
+
           continue;
         }
 
-        console.log("Generating article...");
+        console.log("  Generating article with Ollama...");
+
         const article = await generateArticle(readme);
+
+        if (!article.trim()) {
+          console.log("  Ollama returned an empty article, skipping");
+
+          skipped++;
+
+          continue;
+        }
 
         removeOldPost(repo.name);
 
-        const filename = getPostFilename(repo.name, lastCommitDate);
+        const filename = getPostFilename(
+          repo.name,
+          lastCommitDate,
+        );
+
         const postPath = path.join(postsDir, filename);
+
         const isNew = !fs.existsSync(postPath);
 
         fs.writeFileSync(
           postPath,
-          createPost(repo.name, lastCommitDate, article),
+          createPost(
+            repo.name,
+            lastCommitDate,
+            article,
+          ),
+          "utf8",
         );
-        console.log(`  ${isNew ? "Created" : "Updated"}: ${filename}`);
-        isNew ? created++ : updated++;
+
+        console.log(
+          `  ${isNew ? "Created" : "Updated"}: ${filename}`,
+        );
+
+        if (isNew) {
+          created++;
+        } else {
+          updated++;
+        }
       } catch (err) {
         console.log(`Error: ${err.message}`);
+
         skipped++;
       }
     }
 
+    console.log("");
+    console.log("==============================================");
     console.log(
-      `\nSummary: ${created} created, ${updated} updated, ${skipped} skipped`,
+      `Summary: ${created} created, ${updated} updated, ${skipped} skipped`,
     );
+    console.log("==============================================");
   } catch (err) {
+    console.error("");
     console.error("Fatal error:", err.message);
+
     process.exit(1);
   }
 })();

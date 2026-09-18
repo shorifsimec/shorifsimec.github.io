@@ -1,7 +1,7 @@
 name: Daily Generate Blog Content
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to trigger this manually with a button click
   schedule:
     - cron: "0 22 * * *"
 
@@ -11,40 +11,14 @@ permissions:
 jobs:
   analyze-repos:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout target repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Automated Repo Article Generator
+        uses: shorifsimec/ai-jekyll-posts-generation-action@v1
         with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: |
-          pip install requests PyYAML
-
-      - name: Generate Blog Post
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          python scripts/generate_blog.py
-
-      - name: Commit generated post
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add _posts/
-
-          if git diff --cached --quiet; then
-            echo "No new blog post generated."
-          else
-            git commit -m "chore: generate daily blog post"
-            git push
-          fi
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          ollama-api-key: ${{ secrets.OLLAMA_API_KEY }}
